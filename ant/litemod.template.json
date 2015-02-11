@@ -1,0 +1,7 @@
+{
+    "name": "${ant.project.name}",
+    "mcversion": "${litemodversion}",
+    "revision": "${build.number}",
+    "author": "${author}",
+    "description": "Staff derps. What more could you ever want?\n - WE compass equivalent\n - List of invisible players\n - Find pet owners"
+}
