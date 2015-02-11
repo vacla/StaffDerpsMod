@@ -11,8 +11,8 @@ import net.minecraft.util.AxisAlignedBB;
 
 public class PetOwner {
 
-	AxisAlignedBB bb;
-	String randomOwner;
+	private AxisAlignedBB bb;
+	private String randomOwner;
 
 	public PetOwner(){}
 	
@@ -29,7 +29,9 @@ public class PetOwner {
 		String result = "";
 		for (Object dog: this.getDog())
 		{
-			this.randomOwner = ((EntityWolf)dog).getOwnerName();
+			String name = ((EntityWolf)dog).getOwnerName();
+			if (name != null && name != "")
+				this.randomOwner = name;
 			result += ((EntityWolf)dog).getCommandSenderName() + " ";			
 		}
 		return result;
@@ -48,7 +50,9 @@ public class PetOwner {
 		String result = "";
 		for (Object cat: this.getCat())
 		{
-			this.randomOwner = ((EntityOcelot)cat).getOwnerName();
+			String name = ((EntityOcelot)cat).getOwnerName();
+			if (name != null && name != "")
+				this.randomOwner = name;
 			result += ((EntityOcelot)cat).getCommandSenderName() + " ";			
 		}
 		return result;
@@ -57,8 +61,11 @@ public class PetOwner {
 	/**
 	 * copy UUID of in-range pet to clipboard
 	 */
-	public void getRandomOwner()
+	public String getRandomOwner()
 	{
-		GuiScreen.setClipboardString(this.randomOwner);
+//		GuiScreen.setClipboardString(this.randomOwner);
+		this.getCatOwners();
+		this.getDogOwners();
+		return this.randomOwner;
 	}
 }
