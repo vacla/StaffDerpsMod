@@ -56,7 +56,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "0.9.7"; }
+	public String getVersion() { return "0.9.8"; }
 
 	@Override
 	public void init(File configPath)
@@ -180,6 +180,8 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 								if (first != 10000000)
 								{
 									second = Integer.parseInt(tokens[j]);
+									first *= 16;
+									second *= 16;
 									Minecraft.getMinecraft().thePlayer.sendChatMessage(
 											"/tppos " + first + " 100 " + second);
 									return;
@@ -201,6 +203,12 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /sd)");
 				for (String command: commands)
 					this.logMessage("/staffderps " + command);
+			}
+			else
+			{
+				this.logMessage("Staff Derps [v" + this.getVersion() + "] by Kyzeragon");
+				this.logMessage("Type /sd help or /staffderps help for commands.");
+				return;
 			}
 		}
 	}

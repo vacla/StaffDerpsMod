@@ -63,7 +63,7 @@ public class PetOwner {
 	 */
 	public String getRandomOwner()
 	{
-//		GuiScreen.setClipboardString(this.randomOwner);
+		this.randomOwner = "";
 		this.getCatOwners();
 		this.getDogOwners();
 		return this.randomOwner;
