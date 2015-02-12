@@ -163,43 +163,34 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				else
 					this.logError("Usage: /staffderps pet <on|off|copy>");
 			}
-			else if (message.matches(".*(Mecha|mecha).*"))
+			else if (tokens[1].equalsIgnoreCase("chunk") || tokens[1].equalsIgnoreCase("c"))
 			{
-				message.replaceAll("(Mecha|mecha)", "Mecha ");
-				tokens = message.split(" ");
+				int first = 10000000;
+				int second = 10000000;
 				for (int i = 0; i < tokens.length; i++)
 				{
-					if (tokens[i].equalsIgnoreCase("mecha"))
+					if (tokens[i].matches("-*[0-9]*"))
 					{
-						int first = 10000000; 
-						int second = 10000000;
-						for (int j = i + 1; j < tokens.length; j++)
+						if (first != 10000000)
 						{
-							if (tokens[j].matches("-*[0-9]*"))
-							{
-								if (first != 10000000)
-								{
-									second = Integer.parseInt(tokens[j]);
-									first *= 16;
-									second *= 16;
-									Minecraft.getMinecraft().thePlayer.sendChatMessage(
-											"/tppos " + first + " 100 " + second);
-									return;
-								}
-								else
-									first = Integer.parseInt(tokens[j]);
-							}
+							second = Integer.parseInt(tokens[i]) * 16;
+							first *= 16;
+							Minecraft.getMinecraft().thePlayer.sendChatMessage(
+									"/tppos " + first + " 100 " + second);
+							return;
 						}
+						else
+							first = Integer.parseInt(tokens[i]);
 					}
 				}
-				this.logError("Usage: /staffderps mecha <x> <y>");
+				this.logError("Usage: /staffderps chunk <x> <y>");
 			}
 			else if (tokens[1].equalsIgnoreCase("help"))
 			{
 				String[] commands = {"invis <on|off> - See through invisibility effect.",
 						"pet <on|off|copy> - Get pet owner.",
-						"mecha <x> <y> - Teleport to chunk coords.",
-						"help - This help message."};
+						"chunk <x> <y> - Teleport to chunk coords.",
+				"help - This help message."};
 				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /sd)");
 				for (String command: commands)
 					this.logMessage("/staffderps " + command);
