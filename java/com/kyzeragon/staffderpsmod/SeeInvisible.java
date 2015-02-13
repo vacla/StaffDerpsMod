@@ -24,9 +24,9 @@ public class SeeInvisible {
 		return Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityPlayer.class, this.bb);
 	}
 	
-	public List getInvsPlayers()
+	public List<EntityPlayer> getInvsPlayers()
 	{
-		List playerList = new ArrayList();
+		List playerList = new ArrayList<EntityPlayer>();
 		
 		for (Object player: this.getPlayers())
 		{

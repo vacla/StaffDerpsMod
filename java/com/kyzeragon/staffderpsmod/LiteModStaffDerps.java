@@ -7,6 +7,10 @@ import java.util.UUID;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,10 +23,12 @@ import net.minecraft.util.IChatComponent;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import com.kyzeragon.staffderpsmod.config.StaffDerpsConfig;
 import com.mumfrey.liteloader.ChatFilter;
 import com.mumfrey.liteloader.OutboundChatListener;
+import com.mumfrey.liteloader.PostRenderListener;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigStrategy;
@@ -34,7 +40,7 @@ import com.mumfrey.liteloader.modconfig.ExposableOptions;
  * @author Kyzeragon
  */
 @ExposableOptions(strategy = ConfigStrategy.Versioned, filename="staffderpsmod.json")
-public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatListener // TODO: display invis location
+public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatListener, PostRenderListener // TODO: display invis location
 {
 	///// FIELDS /////
 	private static KeyBinding leftBinding;
@@ -56,7 +62,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "0.9.8"; }
+	public String getVersion() { return "1.0.0"; }
 
 	@Override
 	public void init(File configPath)
@@ -220,6 +226,89 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	}
 
 	/**
+	 * Display location of invisible players if display is on.
+	 */
+	@Override
+	public void onPostRenderEntities(float partialTicks) {
+		if (!this.config.getSeeInvisibleOn())
+			return;
+
+		RenderHelper.disableStandardItemLighting();
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDepthMask(false);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+		boolean foggy = GL11.glIsEnabled(GL11.GL_FOG);
+		GL11.glDisable(GL11.GL_FOG);
+
+		GL11.glPushMatrix();
+
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		GL11.glTranslated(-(player.prevPosX + (player.posX - player.prevPosX) * partialTicks),
+				-(player.prevPosY + (player.posY - player.prevPosY) * partialTicks),
+				-(player.prevPosZ + (player.posZ - player.prevPosZ) * partialTicks));
+
+		Tessellator tess = Tessellator.instance;
+		List<EntityPlayer> players = this.invis.getInvsPlayers();
+		for (EntityPlayer currentPlayer: players)
+		{
+			double x = currentPlayer.posX - 0.3;
+			double y = currentPlayer.posY;
+			double z = currentPlayer.posZ - 0.3;
+			GL11.glLineWidth(3.0f);
+			tess.startDrawing(GL11.GL_LINE_LOOP);
+			tess.setColorRGBA(255, 0, 0, 200);
+			tess.addVertex(x, y, z);
+			tess.addVertex(x + 0.6, y, z);
+			tess.addVertex(x + 0.6, y, z + 0.6);
+			tess.addVertex(x, y, z + 0.6);
+			tess.draw();
+
+			tess.startDrawing(GL11.GL_LINE_LOOP);
+			tess.setColorRGBA(255, 0, 0, 200);
+			tess.addVertex(x, y + 1.8, z);
+			tess.addVertex(x + 0.6, y + 1.8, z);
+			tess.addVertex(x + 0.6, y + 1.8, z + 0.6);
+			tess.addVertex(x, y + 1.8, z + 0.6);
+			tess.draw();
+
+			tess.startDrawing(GL11.GL_LINES);
+			tess.setColorRGBA(255, 0, 0, 200);
+			tess.addVertex(x, y, z);
+			tess.addVertex(x, y + 1.8, z);
+
+			tess.addVertex(x + 0.6, y, z);
+			tess.addVertex(x + 0.6, y + 1.8, z);
+
+			tess.addVertex(x + 0.6, y, z + 0.6);
+			tess.addVertex(x + 0.6, y + 1.8, z + 0.6);
+
+			tess.addVertex(x, y, z + 0.6);
+			tess.addVertex(x, y + 1.8, z + 0.6);
+			tess.draw();
+		}
+
+		GL11.glPopMatrix();
+
+		// Only re-enable fog if it was enabled before we messed with it.
+		// Or else, fog is *all* you'll see with Optifine.
+		if (foggy)
+			GL11.glEnable(GL11.GL_FOG);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthMask(true);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_BLEND);
+
+		RenderHelper.enableStandardItemLighting();
+	}
+
+	/**
 	 * Logs the message to the user
 	 * @param message The message to log
 	 */
@@ -240,4 +329,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.RED));
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
 	}
+
+	@Override
+	public void onPostRender(float partialTicks) {}
 }
