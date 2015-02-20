@@ -40,7 +40,7 @@ import com.mumfrey.liteloader.modconfig.ExposableOptions;
  * @author Kyzeragon
  */
 @ExposableOptions(strategy = ConfigStrategy.Versioned, filename="staffderpsmod.json")
-public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatListener, PostRenderListener // TODO: display invis location
+public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatListener, PostRenderListener
 {
 	///// FIELDS /////
 	private static KeyBinding leftBinding;
@@ -175,7 +175,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				int second = 10000000;
 				for (int i = 0; i < tokens.length; i++)
 				{
-					if (tokens[i].matches("-*[0-9]*"))
+					if (tokens[i].matches("-?[0-9]*"))
 					{
 						if (first != 10000000)
 						{
@@ -232,7 +232,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public void onPostRenderEntities(float partialTicks) {
 		if (!this.config.getSeeInvisibleOn())
 			return;
-
+		// TODO: display player name too
 		RenderHelper.disableStandardItemLighting();
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 
