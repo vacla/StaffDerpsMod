@@ -118,9 +118,12 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	@Override
 	public void onSendChatMessage(C01PacketChatMessage packet, String message)
 	{
-		String[] tokens = message.split(" ");
+		String[] tokens = message.trim().split(" ");
 		if (tokens[0].equalsIgnoreCase("/staffderps") || tokens[0].equalsIgnoreCase("/sd"))
 		{
+			while (message.matches(".*  .*"))
+				message = message.replaceAll("  ", " ");
+			tokens = message.split(" ");
 			this.sentCmd = true;
 			if (tokens.length < 2)
 			{
@@ -190,6 +193,46 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 					}
 				}
 				this.logError("Usage: /staffderps chunk <x> <y>");
+			}
+			else if (tokens[1].equalsIgnoreCase("tp"))
+			{ // X= -842.300 Y= 5900000 Z= 8,680
+				message = message.replaceAll("\\.[0-9]*", "");
+				if (tokens.length == 3 && tokens[2].contains("/"))
+					message = message.replaceAll("/", " ");
+				else if (tokens.length == 3 && tokens[2].contains("."))
+					message = message.replaceAll(".", " ");
+				else if (tokens.length == 3 && tokens[2].contains(","))
+					message = message.replaceAll(",", " ");
+				
+				String result = "";
+				char prevChar = 'a';
+				for (int i = 7; i < message.length(); i++)
+				{
+					char c = message.charAt(i);
+					if (!(prevChar == '-' && c == ' '))
+						if ("-0123456789 ".contains("" + c))
+							result += c;
+				}
+				while (result.matches(".*  .*"))
+					result = result.replaceAll("  ", " ");
+				String[] coords = result.trim().split(" ");
+				if (coords.length != 3)
+				{
+					for (String coord: coords)
+						System.out.println("\"" + coord + "\"");
+					this.logError("Invalid format: " + result);
+					return;
+				}
+				String y = coords[1];
+				if (Integer.parseInt(y) > 260)
+				{
+					y = y.substring(0, 3);
+					if (Integer.parseInt(y) > 260)
+						y = y.substring(0, 2);
+				}
+				result = coords[0] + " " + y + " " + coords[2];
+				this.logMessage("Running /tppos " + result);
+				Minecraft.getMinecraft().thePlayer.sendChatMessage("/tppos " + result);
 			}
 			else if (tokens[1].equalsIgnoreCase("help"))
 			{
