@@ -53,6 +53,9 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	private boolean showOwner;
 	private boolean sentCmd;
 
+	private int showMinY;
+	private int showMaxY;
+
 	private StaffDerpsConfig config;
 
 	///// METHODS /////
@@ -62,7 +65,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.0.0"; }
+	public String getVersion() { return "1.0.5"; }
 
 	@Override
 	public void init(File configPath)
@@ -73,6 +76,8 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		this.config = new StaffDerpsConfig();
 		this.showOwner = false;
 		this.sentCmd = false;
+		this.showMinY = 0;
+		this.showMaxY = 256;
 
 		leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
 		rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
@@ -195,25 +200,25 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				this.logError("Usage: /staffderps chunk <x> <y>");
 			}
 			else if (tokens[1].equalsIgnoreCase("tp"))
-			{ // X= -842.300 Y= 5900000 Z= 8,680
-				message = message.replaceAll("\\.[0-9]*", "");
-				if (tokens.length == 3 && tokens[2].contains("/"))
+			{
+				message = message.replaceAll("\\.[0-9]*", ""); // get rid of decimals
+				if (tokens.length == 3 && tokens[2].contains("/")) // try to split with / . ,
 					message = message.replaceAll("/", " ");
 				else if (tokens.length == 3 && tokens[2].contains("."))
 					message = message.replaceAll(".", " ");
 				else if (tokens.length == 3 && tokens[2].contains(","))
 					message = message.replaceAll(",", " ");
-				
+
 				String result = "";
 				char prevChar = 'a';
-				for (int i = 7; i < message.length(); i++)
+				for (int i = 7; i < message.length(); i++) // keep only -, numbers, and spaces
 				{
 					char c = message.charAt(i);
 					if (!(prevChar == '-' && c == ' '))
 						if ("-0123456789 ".contains("" + c))
 							result += c;
 				}
-				while (result.matches(".*  .*"))
+				while (result.matches(".*  .*")) // fix the y coord if too high
 					result = result.replaceAll("  ", " ");
 				String[] coords = result.trim().split(" ");
 				if (coords.length != 3)
@@ -234,15 +239,78 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				this.logMessage("Running /tppos " + result);
 				Minecraft.getMinecraft().thePlayer.sendChatMessage("/tppos " + result);
 			}
+			else if (tokens[1].equalsIgnoreCase("lbf"))
+			{
+				message = message.replaceAll("§.", "");
+				tokens = message.split(" ");
+				if (tokens.length > 5)
+				{
+					this.logError("Too many arguments! Usage: /sd lbf y <minY> <maxY>");
+					return;
+				}// TODO: ignore regex?
+				else if (tokens.length == 3)
+				{
+					if (tokens[2].equalsIgnoreCase("y"))
+					{
+						this.logMessage("Currently only showing lb entries with Y coords from "
+								+ this.showMinY + " to " + this.showMaxY + " (inclusive).");
+						return;
+					}
+					this.logError("Too few arguments! Usage: /sd lbf y <minY> <maxY>");
+					return;
+				}
+				else if (tokens.length == 4)
+				{
+					if (tokens[2].equalsIgnoreCase("y") && tokens[3].matches("clear"))
+					{
+						this.showMinY = 0;
+						this.showMaxY = 256;
+						this.logMessage("Now showing all y coordinates for logblock entries.");
+						return;
+					}
+					this.logError("Usage: /sd lbf y <minY> <maxY>");
+					return;
+				}
+				else if (tokens.length == 5) // correct usage for y coord
+				{
+					if (!tokens[2].equalsIgnoreCase("y")) {
+						this.logError("Usage: /sd lbf y <minY> <maxY>");
+						return;
+					}
+					else if (!tokens[3].matches("[0-9]+")) {
+						this.logError(tokens[3] + " is not a valid positive integer!");
+						return;
+					}
+					else if (!tokens[4].matches("[0-9]+")) {
+						System.out.println(message);
+						this.logError(tokens[4] + " is not a valid positive integer!");
+						return;
+					}
+					else {
+						this.showMinY = Integer.parseInt(tokens[3]);
+						this.showMaxY = Integer.parseInt(tokens[4]);
+						this.logMessage("Now showing only lb entries with Y coords between "
+								+ this.showMinY + " to " + this.showMaxY + " (inclusive).");
+						return;
+					}
+				}
+				else if (tokens.length == 2)
+				{
+					this.logMessage("Usage: /sd lbf y <minY> <maxY>");
+					return;
+				}
+			}
 			else if (tokens[1].equalsIgnoreCase("help"))
 			{
 				String[] commands = {"invis <on|off> - See through invisibility effect.",
 						"pet <on|off|copy> - Get pet owner.",
 						"chunk <x> <y> - Teleport to chunk coords.",
+						"tp <coordinates> - Attempts to TP to poorly formatted coords.",
+						"lbf y <minY> <maxY> - Shows only lb entries within specified Y.",
 				"help - This help message."};
-				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /sd)");
+				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /staffderps)");
 				for (String command: commands)
-					this.logMessage("/staffderps " + command);
+					this.logMessage("/sd " + command);
 			}
 			else
 			{
@@ -264,6 +332,14 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		{
 			this.sentCmd = false;
 			return false;
+		}
+		if (message.matches("§r§6\\([0-9]+\\).*at .*:.*:.*"))
+		{
+			String[] afterSplit = message.split(":");
+			int y = Integer.parseInt(afterSplit[afterSplit.length - 2]);
+			System.out.println(y);
+			if (y > this.showMaxY || y < this.showMinY)
+				return false;
 		}
 		return true;
 	}
