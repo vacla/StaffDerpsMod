@@ -49,12 +49,10 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	private CompassMath compassMath;
 	private SeeInvisible invis;
 	private PetOwner owner;
+	private LBFilter lbfilter;
 
 	private boolean showOwner;
 	private boolean sentCmd;
-
-	private int showMinY;
-	private int showMaxY;
 
 	private StaffDerpsConfig config;
 
@@ -65,7 +63,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.0.5"; }
+	public String getVersion() { return "1.0.6"; }
 
 	@Override
 	public void init(File configPath)
@@ -74,10 +72,10 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		this.invis = new SeeInvisible();
 		this.owner = new PetOwner();
 		this.config = new StaffDerpsConfig();
+		this.lbfilter = new LBFilter();
+		
 		this.showOwner = false;
 		this.sentCmd = false;
-		this.showMinY = 0;
-		this.showMaxY = 256;
 
 		leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
 		rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
@@ -139,7 +137,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			else if (tokens[1].equalsIgnoreCase("invis") || tokens[1].equalsIgnoreCase("invisible"))
 			{
 				if (tokens.length < 3)
-					this.logError("Usage: /staffderps invis <on|off>");
+					this.logError("Usage: /sd invis <on|off>");
 				else if (tokens[2].equalsIgnoreCase("on"))
 				{
 					this.config.setSeeInvisibleOn(true);
@@ -151,12 +149,12 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 					this.logMessage("See through invisibility: OFF");
 				}
 				else
-					this.logError("Usage: /staffderps invis <on|off>");
+					this.logError("Usage: /sd invis <on|off>");
 			}
 			else if (tokens[1].equalsIgnoreCase("pet"))
 			{ // TODO: make it clearer which pet it is
 				if (tokens.length < 3)
-					this.logError("Usage: /staffderps pet <on|off|copy>");
+					this.logError("Usage: /sd pet <on|off|copy>");
 				else if (tokens[2].equalsIgnoreCase("on")) {
 					this.config.setSeePetOwnerOn(true);
 					this.logMessage("Displaying pets in 2 block radius");
@@ -175,7 +173,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 					}
 				}
 				else
-					this.logError("Usage: /staffderps pet <on|off|copy>");
+					this.logError("Usage: /sd pet <on|off|copy>");
 			}
 			else if (tokens[1].equalsIgnoreCase("chunk") || tokens[1].equalsIgnoreCase("c"))
 			{
@@ -197,7 +195,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 							first = Integer.parseInt(tokens[i]);
 					}
 				}
-				this.logError("Usage: /staffderps chunk <x> <y>");
+				this.logError("Usage: /sd chunk <x> <y>");
 			}
 			else if (tokens[1].equalsIgnoreCase("tp"))
 			{
@@ -241,64 +239,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			}
 			else if (tokens[1].equalsIgnoreCase("lbf"))
 			{
-				message = message.replaceAll("§.", "");
-				tokens = message.split(" ");
-				if (tokens.length > 5)
-				{
-					this.logError("Too many arguments! Usage: /sd lbf y <minY> <maxY>");
-					return;
-				}// TODO: ignore regex?
-				else if (tokens.length == 3)
-				{
-					if (tokens[2].equalsIgnoreCase("y"))
-					{
-						this.logMessage("Currently only showing lb entries with Y coords from "
-								+ this.showMinY + " to " + this.showMaxY + " (inclusive).");
-						return;
-					}
-					this.logError("Too few arguments! Usage: /sd lbf y <minY> <maxY>");
-					return;
-				}
-				else if (tokens.length == 4)
-				{
-					if (tokens[2].equalsIgnoreCase("y") && tokens[3].matches("clear"))
-					{
-						this.showMinY = 0;
-						this.showMaxY = 256;
-						this.logMessage("Now showing all y coordinates for logblock entries.");
-						return;
-					}
-					this.logError("Usage: /sd lbf y <minY> <maxY>");
-					return;
-				}
-				else if (tokens.length == 5) // correct usage for y coord
-				{
-					if (!tokens[2].equalsIgnoreCase("y")) {
-						this.logError("Usage: /sd lbf y <minY> <maxY>");
-						return;
-					}
-					else if (!tokens[3].matches("[0-9]+")) {
-						this.logError(tokens[3] + " is not a valid positive integer!");
-						return;
-					}
-					else if (!tokens[4].matches("[0-9]+")) {
-						System.out.println(message);
-						this.logError(tokens[4] + " is not a valid positive integer!");
-						return;
-					}
-					else {
-						this.showMinY = Integer.parseInt(tokens[3]);
-						this.showMaxY = Integer.parseInt(tokens[4]);
-						this.logMessage("Now showing only lb entries with Y coords between "
-								+ this.showMinY + " to " + this.showMaxY + " (inclusive).");
-						return;
-					}
-				}
-				else if (tokens.length == 2)
-				{
-					this.logMessage("Usage: /sd lbf y <minY> <maxY>");
-					return;
-				}
+				this.lbfilter.handleCommand(message);
 			}
 			else if (tokens[1].equalsIgnoreCase("help"))
 			{
@@ -323,24 +264,20 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 
 
 	/**
-	 * Stops the Unknown command error from the server from displaying
+	 * Stops the Unknown command error from the server from displaying,
+	 * and also prevents displaying of lb entries that should be filtered out
 	 */
 	@Override
 	public boolean onChat(S02PacketChat chatPacket, IChatComponent chat,
 			String message) {
+		System.out.println(message);
 		if (message.matches(".*nknown.*ommand.*") && this.sentCmd)
 		{
 			this.sentCmd = false;
 			return false;
 		}
-		if (message.matches("§r§6\\([0-9]+\\).*at .*:.*:.*"))
-		{
-			String[] afterSplit = message.split(":");
-			int y = Integer.parseInt(afterSplit[afterSplit.length - 2]);
-			System.out.println(y);
-			if (y > this.showMaxY || y < this.showMinY)
-				return false;
-		}
+		else if (message.matches("§r§6\\([0-9]+\\).*at .*:.*:.*"))
+			return this.lbfilter.handleEntry(message);
 		return true;
 	}
 
