@@ -16,11 +16,11 @@ import net.minecraft.util.EnumChatFormatting;
 public class ChestSorter 
 {
 	private Container container;
-	private LinkedList<ItemStack> items;
+	private LinkedList<Integer> items;
 
 	public ChestSorter()
 	{
-		this.items = new LinkedList<ItemStack>();
+		this.items = new LinkedList<Integer>();
 	}
 
 	public void grab(Container container)
@@ -30,14 +30,16 @@ public class ChestSorter
 		this.container = container;
 		EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 		List<Slot> slots = this.container.inventorySlots;
-		ItemStack spoodereye = new ItemStack(Item.getItemById(375));
 		for (int i = 0; i < slots.size() - 36; i++)
 		{
 			if (slots.get(i) != null && slots.get(i).getStack() != null)
 			{
-				for (ItemStack stack: items)
+				for (int id: items)
 				{
-					if (slots.get(i).getStack().isItemEqual(stack))
+					int currID = Item.getIdFromItem(slots.get(i).getStack().getItem());
+					System.out.println("Current: " + Item.getIdFromItem(slots.get(i).getStack().getItem()));
+					if (currID == id)
+//					if (slots.get(i).getStack().isItemEqual(stack))
 					{
 						Minecraft.getMinecraft().playerController.windowClick(container.windowId, i, 0, 1, player);
 //						System.out.println("Grabbing slot " + i);
@@ -68,15 +70,15 @@ public class ChestSorter
 		for (String item: parsedList)
 		{
 			if (item.matches("[0-9]+") && Item.itemRegistry.containsID(Integer.parseInt(item)))
-				this.items.addFirst(new ItemStack((Item)Item.itemRegistry.getObjectForID((Integer.parseInt(item)))));
+				this.items.addFirst(Integer.parseInt(item));
 			else if (Item.itemRegistry.containsKey(item))
-				this.items.addFirst(new ItemStack((Item)Item.itemRegistry.getObject(item)));
+				this.items.addFirst(Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject(item)));
 			else
 			{
 				this.logError("No such item ID/name as " + item + ".");
 				return;
 			}
-			result += " " + this.items.get(0).getDisplayName() + ",";
+			result += " " + Item.getItemById(this.items.get(0)).getUnlocalizedName() + ",";
 		}
 		this.logMessage(result.substring(0, result.length() - 1) + ".");
 	}
