@@ -50,9 +50,11 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	private SeeInvisible invis;
 	private PetOwner owner;
 	private LBFilter lbfilter;
+	private ChestSorter chestSorter;
 
 	private boolean showOwner;
 	private boolean sentCmd;
+	private int grabCooldown;
 
 	private StaffDerpsConfig config;
 
@@ -63,7 +65,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.0.6"; }
+	public String getVersion() { return "1.1.0"; }
 
 	@Override
 	public void init(File configPath)
@@ -73,9 +75,11 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		this.owner = new PetOwner();
 		this.config = new StaffDerpsConfig();
 		this.lbfilter = new LBFilter();
-		
+
 		this.showOwner = false;
 		this.sentCmd = false;
+		this.chestSorter = new ChestSorter();
+		this.grabCooldown = 20;
 
 		leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
 		rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
@@ -90,6 +94,18 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	@Override
 	public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
 	{
+		if (inGame && minecraft.thePlayer.openContainer != null
+				&& !minecraft.thePlayer.openContainer.equals(minecraft.thePlayer.inventoryContainer))
+		{
+			if (this.grabCooldown < 20)
+				this.grabCooldown++;
+			if (Keyboard.isKeyDown(Keyboard.KEY_K) && this.grabCooldown == 20)
+			{
+				this.chestSorter.grab(minecraft.thePlayer.openContainer);
+				this.grabCooldown = 0;
+			}
+		}
+
 		if (inGame && minecraft.currentScreen == null && Minecraft.isGuiEnabled())
 		{			
 			if (LiteModStaffDerps.leftBinding.isPressed())
@@ -133,6 +149,10 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				this.logMessage("Staff Derps [v" + this.getVersion() + "] by Kyzeragon");
 				this.logMessage("Type /sd help or /staffderps help for commands.");
 				return;
+			}
+			else if (tokens[1].equalsIgnoreCase("grab"))
+			{
+				this.chestSorter.handleCommand(message);
 			}
 			else if (tokens[1].equalsIgnoreCase("invis") || tokens[1].equalsIgnoreCase("invisible"))
 			{
@@ -248,6 +268,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 						"chunk <x> <y> - Teleport to chunk coords.",
 						"tp <coordinates> - Attempts to TP to poorly formatted coords.",
 						"lbf y <minY> <maxY> - Shows only lb entries within specified Y.",
+						"grab <item[,item2]> - Grabs all listed items when opening a container.",
 				"help - This help message."};
 				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /staffderps)");
 				for (String command: commands)
@@ -371,7 +392,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	private void logMessage(String message)
 	{
 		ChatComponentText displayMessage = new ChatComponentText(message);
-		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.AQUA));
+		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.GREEN));
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
 	}
 
