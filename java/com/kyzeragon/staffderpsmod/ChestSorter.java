@@ -29,7 +29,7 @@ public class ChestSorter
 		this.meta = new LinkedList<Integer>();
 		this.presets = new HashMap<String, int[]>();
 		
-		int[] trash = {261, 268, 269, 270, 271, 290, 295, 375};
+		int[] trash = {261, 268, 269, 270, 271, 290, 295, 375, 358};
 		int[] junk = {78, 69, 70, 72, 77, 96, 107, 65, 143, 147, 148, 281,
 				53, 67, 109, 126, 128, 134, 135, 136, 139, 163, 164, 102, 160, 171, 44, 44}; // add new before 44
 		int[] nostackjunk = {355, 324, 333};
@@ -133,6 +133,8 @@ public class ChestSorter
 				this.meta.addFirst(3);
 				this.meta.addFirst(5);
 			}
+			else if (tokens[2].equalsIgnoreCase("trash"))
+				this.meta.addFirst(0);
 			
 			LiteModStaffDerps.logMessage("§8[§2StaffDerps§8] §aNow grabbing all items in the preset: " + tokens[2]);
 		}
