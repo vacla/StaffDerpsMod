@@ -34,7 +34,8 @@ public class ChestSorter
 				53, 67, 109, 126, 128, 134, 135, 136, 139, 163, 164, 102, 160, 171, 44, 44}; // add new before 44
 		int[] nostackjunk = {355, 324, 333};
 		int[] tooljunk = {398, 273, 274, 275, 291, 284, 285, 286, 294, 346, 293, 272};
-		int[] ores = {152, 331, 14, 15, 16, 21, 22, 41, 42, 56, 57, 73, 129, 133, 264, 263, 265, 266, 388, 371};
+		int[] ores = {152, 331, 14, 15, 16, 21, 22, 173, 41, 42, 56, 57, 73, 129, 
+				133, 264, 263, 265, 266, 388, 371, 351}; // add new before 351
 		int[] food = {260, 282, 297, 319, 320, 322, 349, 350, 354, 357, 360, 363, 364, 365, 366, 391,
 				392, 393, 396, 400, 296, 361, 362, 86, 103};
 		int[] plants = {6, 18, 31, 32, 37, 38, 39, 40, 81, 106, 111, 161, 175, 338};
@@ -151,6 +152,8 @@ public class ChestSorter
 			}
 			else if (tokens[2].equalsIgnoreCase("trash"))
 				this.meta.addFirst(0);
+			else if (tokens[2].equalsIgnoreCase("ores"))
+				this.meta.addFirst(4);
 			
 			LiteModStaffDerps.logMessage("§8[§2StaffDerps§8] §aNow grabbing all items in the preset: " + tokens[2]);
 		}
