@@ -65,7 +65,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.1.2"; }
+	public String getVersion() { return "1.1.5"; }
 
 	@Override
 	public void init(File configPath)
