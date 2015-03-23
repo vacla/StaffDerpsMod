@@ -37,12 +37,10 @@ public class ChestSorter
 				for (int id: items)
 				{
 					int currID = Item.getIdFromItem(slots.get(i).getStack().getItem());
-					System.out.println("Current: " + Item.getIdFromItem(slots.get(i).getStack().getItem()));
+//					System.out.println("Current: " + Item.getIdFromItem(slots.get(i).getStack().getItem()));
 					if (currID == id)
-//					if (slots.get(i).getStack().isItemEqual(stack))
 					{
 						Minecraft.getMinecraft().playerController.windowClick(container.windowId, i, 0, 1, player);
-//						System.out.println("Grabbing slot " + i);
 						break;
 						/* Action values:
 						 * 0: Standard Click
@@ -66,7 +64,7 @@ public class ChestSorter
 	public void setItems(String list)
 	{
 		String[] parsedList = list.split(",");
-		String result = "Now grabbing items:";
+		String result = "§8[§2StaffDerps§8] §aNow grabbing items:";
 		for (String item: parsedList)
 		{
 			if (item.matches("[0-9]+") && Item.itemRegistry.containsID(Integer.parseInt(item)))
@@ -75,47 +73,35 @@ public class ChestSorter
 				this.items.addFirst(Item.itemRegistry.getIDForObject(Item.itemRegistry.getObject(item)));
 			else
 			{
-				this.logError("No such item ID/name as " + item + ".");
+				LiteModStaffDerps.logError("No such item ID/name as \"" + item + "\".");
 				return;
 			}
 			result += " " + Item.getItemById(this.items.get(0)).getUnlocalizedName() + ",";
 		}
-		this.logMessage(result.substring(0, result.length() - 1) + ".");
+		LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".");
 	}
 
 	public void handleCommand(String message)
 	{
 		String[] tokens = message.split(" ");
 		if (tokens.length < 3)
-			this.logError("Usage: /sd sort <item>");
+		{
+			if (this.items.size() < 1)
+			{
+				LiteModStaffDerps.logError("No items specified yet. Usage: /sd grab <item[,item2]>");
+				return;
+			}
+			String result = "§8[§2StaffDerps§8] §aCurrently grabbing:";
+			for (Integer id: this.items)
+				result += " " + Item.getItemById(id).getUnlocalizedName() + ",";
+			LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".");
+		}
 		else if (tokens.length == 3 && tokens[2].equalsIgnoreCase("clear"))
 		{
 			this.items.clear();
-			this.logMessage("Cleared list of items to grab");
+			LiteModStaffDerps.logMessage("§8[§2StaffDerps§8] §aCleared list of items to grab");
 		}
 		else if (tokens.length == 3)
 			this.setItems(tokens[2]);
-	}
-
-	/**
-	 * Logs the message to the user
-	 * @param message The message to log
-	 */
-	private void logMessage(String message)
-	{
-		ChatComponentText displayMessage = new ChatComponentText(message);
-		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.GREEN));
-		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
-	}
-
-	/**
-	 * Logs the error message to the user
-	 * @param message The error message to log
-	 */
-	private void logError(String message)
-	{
-		ChatComponentText displayMessage = new ChatComponentText(message);
-		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.RED));
-		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
 	}
 }

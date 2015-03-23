@@ -65,7 +65,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.1.1"; }
+	public String getVersion() { return "1.1.2"; }
 
 	@Override
 	public void init(File configPath)
@@ -79,7 +79,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		this.showOwner = false;
 		this.sentCmd = false;
 		this.chestSorter = new ChestSorter();
-		this.grabCooldown = 20;
+		this.grabCooldown = 5;
 
 		leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
 		rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
@@ -97,9 +97,9 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		if (inGame && minecraft.thePlayer.openContainer != null
 				&& !minecraft.thePlayer.openContainer.equals(minecraft.thePlayer.inventoryContainer))
 		{
-			if (this.grabCooldown < 20)
+			if (this.grabCooldown < 5)
 				this.grabCooldown++;
-			if (Keyboard.isKeyDown(Keyboard.KEY_TAB) && this.grabCooldown == 20)
+			if (Keyboard.isKeyDown(Keyboard.KEY_TAB) && this.grabCooldown == 5)
 			{
 				this.chestSorter.grab(minecraft.thePlayer.openContainer);
 				this.grabCooldown = 0;
@@ -268,7 +268,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 						"chunk <x> <y> - Teleport to chunk coords.",
 						"tp <coordinates> - Attempts to TP to poorly formatted coords.",
 						"lbf y <minY> <maxY> - Shows only lb entries within specified Y.",
-						"grab <item[,item2]> - Grabs all listed items when opening a container.",
+						"grab <item[,item2]> - Specify items to grab from container when pressing TAB.",
 				"help - This help message."};
 				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /staffderps)");
 				for (String command: commands)
@@ -389,7 +389,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	 * Logs the message to the user
 	 * @param message The message to log
 	 */
-	private void logMessage(String message)
+	public static void logMessage(String message)
 	{
 		ChatComponentText displayMessage = new ChatComponentText(message);
 		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.GREEN));
@@ -400,9 +400,9 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	 * Logs the error message to the user
 	 * @param message The error message to log
 	 */
-	private void logError(String message)
+	public static void logError(String message)
 	{
-		ChatComponentText displayMessage = new ChatComponentText(message);
+		ChatComponentText displayMessage = new ChatComponentText("§8[§4!§8] §c" + message + " §8[§4!§8]");
 		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.RED));
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
 	}
