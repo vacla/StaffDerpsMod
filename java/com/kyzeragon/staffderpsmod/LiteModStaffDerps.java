@@ -65,7 +65,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.1.8"; }
+	public String getVersion() { return "1.1.9"; }
 
 	@Override
 	public void init(File configPath)
@@ -146,8 +146,8 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			this.sentCmd = true;
 			if (tokens.length < 2)
 			{
-				this.logMessage("Staff Derps [v" + this.getVersion() + "] by Kyzeragon");
-				this.logMessage("Type /sd help or /staffderps help for commands.");
+				this.logMessage("Staff Derps [v" + this.getVersion() + "] by Kyzeragon", false);
+				this.logMessage("Type /sd help or /staffderps help for commands.", false);
 				return;
 			}
 			else if (tokens[1].equalsIgnoreCase("grab"))
@@ -161,12 +161,12 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				else if (tokens[2].equalsIgnoreCase("on"))
 				{
 					this.config.setSeeInvisibleOn(true);
-					this.logMessage("See through invisibility: ON");
+					this.logMessage("See through invisibility: ON", true);
 				}
 				else if (tokens[2].equalsIgnoreCase("off"))
 				{
 					this.config.setSeeInvisibleOn(false);
-					this.logMessage("See through invisibility: OFF");
+					this.logMessage("See through invisibility: OFF", true);
 				}
 				else
 					this.logError("Usage: /sd invis <on|off>");
@@ -177,11 +177,11 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 					this.logError("Usage: /sd pet <on|off|copy>");
 				else if (tokens[2].equalsIgnoreCase("on")) {
 					this.config.setSeePetOwnerOn(true);
-					this.logMessage("Displaying pets in 2 block radius");
+					this.logMessage("Displaying pets in 2 block radius", true);
 				}
 				else if (tokens[2].equalsIgnoreCase("off")) {
 					this.config.setSeePetOwnerOn(false);
-					this.logMessage("Pet display: OFF");
+					this.logMessage("Pet display: OFF", true);
 				}
 				else if (tokens[2].equalsIgnoreCase("copy")) {
 					String result = this.owner.getRandomOwner();
@@ -189,7 +189,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 						this.logError("No owners for any pets in range!");
 					else {
 						GuiScreen.setClipboardString(result);
-						this.logMessage("Owner UUID copied to clipboard.");
+						this.logMessage("Owner UUID copied to clipboard.", true);
 					}
 				}
 				else
@@ -254,7 +254,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 						y = y.substring(0, 2);
 				}
 				result = coords[0] + " " + y + " " + coords[2];
-				this.logMessage("Running /tppos " + result);
+				this.logMessage("Running /tppos " + result, true);
 				Minecraft.getMinecraft().thePlayer.sendChatMessage("/tppos " + result);
 			}
 			else if (tokens[1].equalsIgnoreCase("lbf"))
@@ -270,14 +270,15 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 						"lbf y <minY> <maxY> - Shows only lb entries within specified Y.",
 						"grab <item[,item2]> - Specify items to grab from container when pressing TAB.",
 				"help - This help message."};
-				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /staffderps)");
+				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /staffderps)", false);
 				for (String command: commands)
-					this.logMessage("/sd " + command);
+					this.logMessage("/sd " + command, false);
+				// TODO: add wiki link
 			}
 			else
 			{
-				this.logMessage("Staff Derps [v" + this.getVersion() + "] by Kyzeragon");
-				this.logMessage("Type /sd help or /staffderps help for commands.");
+				this.logMessage("Staff Derps [v" + this.getVersion() + "] by Kyzeragon", false);
+				this.logMessage("Type /sd help or /staffderps help for commands.", false);
 				return;
 			}
 		}
@@ -389,8 +390,10 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	 * Logs the message to the user
 	 * @param message The message to log
 	 */
-	public static void logMessage(String message)
+	public static void logMessage(String message, boolean addPrefix)
 	{
+		if (addPrefix)
+			message = "§8[§2StaffDerps§8] §a" + message;
 		ChatComponentText displayMessage = new ChatComponentText(message);
 		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.GREEN));
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);

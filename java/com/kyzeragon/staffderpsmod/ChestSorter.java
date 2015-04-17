@@ -28,8 +28,8 @@ public class ChestSorter
 		this.items = new LinkedList<Integer>();
 		this.meta = new LinkedList<Integer>();
 		this.presets = new HashMap<String, int[]>();
-		
-		int[] trash = {261, 268, 269, 270, 271, 290, 295, 375, 394, 358}; // add new before 358
+		// TODO: do these presets in a file so it's easily editable
+		int[] trash = {261, 268, 269, 270, 367, 287, 262, 271, 290, 295, 375, 394, 358}; // add new before 358
 		int[] junk = {78, 69, 70, 72, 77, 96, 107, 65, 143, 147, 148, 281,
 				53, 67, 109, 126, 128, 134, 135, 136, 139, 163, 164, 102, 160, 171, 44, 44}; // add new before 44
 		int[] nostackjunk = {355, 324, 333};
@@ -37,13 +37,19 @@ public class ChestSorter
 		int[] ores = {152, 331, 14, 15, 16, 21, 22, 173, 41, 42, 56, 57, 73, 129, 
 				133, 264, 263, 265, 266, 388, 371, 351}; // add new before 351
 		int[] food = {260, 282, 297, 319, 320, 322, 349, 350, 354, 357, 360, 363, 364, 365, 366, 391,
-				392, 393, 396, 400, 296, 361, 362, 86, 103};
-		int[] plants = {6, 18, 31, 32, 37, 38, 39, 40, 81, 106, 111, 161, 175, 338};
+				392, 393, 400, 296, 361, 362, 86, 103};
+		int[] plants = {6, 18, 31, 32, 37, 38, 39, 40, 81, 106, 111, 161, 175};
 		int[] discs = {2256, 2257, 2258, 2259, 2260, 2261, 2262, 2263, 2264, 2265, 2266, 2267};
 		int[] armor = {298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317};
-		int[] tools = {256, 257, 258, 259, 277, 278, 279, 292, 359, 267, 276, 283};
+		int[] tools = {256, 257, 258, 277, 278, 279, 292, 267, 276, 283};
 		int[] wood = {5, 17, 162};
-		
+		int[] woodjunk = {280, 323, 50, 85};
+		int[] bonez = {352, 351};
+		int[] brewing = {396, 370, 376, 377, 378, 382, 369, 348, 353, 372};
+		int[] redstonestuff = {23, 25, 29, 33, 76, 123, 131, 158, 356, 404, 345, 347};
+		int[] ironstuff = {259, 359, 154, 145, 325, 380, 330, 101, 27, 66, 328, 327};
+		int[] containers = {84, 130, 116, 379, 61, 58, 54, 146};
+				
 		this.presets.put("trash", trash);
 		this.presets.put("junk", junk);
 		this.presets.put("nostackjunk", nostackjunk);
@@ -55,6 +61,12 @@ public class ChestSorter
 		this.presets.put("armor", armor);
 		this.presets.put("tools", tools);
 		this.presets.put("wood", wood);
+		this.presets.put("woodjunk", woodjunk);
+		this.presets.put("bonez", bonez);
+		this.presets.put("brewing", brewing);
+		this.presets.put("redstonestuff", redstonestuff);
+		this.presets.put("ironstuff", ironstuff);
+		this.presets.put("containers", containers);
 	}
 
 	public void grab(Container container)
@@ -91,7 +103,7 @@ public class ChestSorter
 	public void setItems(String list)
 	{
 		String[] parsedList = list.split(",");
-		String result = "§8[§2StaffDerps§8] §aNow grabbing items:";
+		String result = "Now grabbing items:";
 		for (String item: parsedList)
 		{
 			String[] parts = item.split(":");
@@ -111,7 +123,7 @@ public class ChestSorter
 				this.meta.addFirst(-1);
 			result += " " + (new ItemStack(Item.getItemById(this.items.get(0)))).getDisplayName() + ",";
 		}
-		LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".");
+		LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".", true);
 	}
 
 	public void handleCommand(String message)
@@ -124,16 +136,39 @@ public class ChestSorter
 				LiteModStaffDerps.logError("No items specified yet. Usage: /sd grab <item[,item2]>");
 				return;
 			}
-			String result = "§8[§2StaffDerps§8] §aCurrently grabbing:";
+			String result = "Currently grabbing:";
 			for (Integer id: this.items)
 				result += " " + (new ItemStack(Item.getItemById(id))).getDisplayName() + ",";
-			LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".");
+			LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".", true);
 		}
 		else if (tokens.length == 3 && tokens[2].equalsIgnoreCase("clear"))
 		{
 			this.items.clear();
 			this.meta.clear();
-			LiteModStaffDerps.logMessage("§8[§2StaffDerps§8] §aCleared list of items to grab");
+			LiteModStaffDerps.logMessage("Cleared list of items to grab", true);
+		}
+		else if (tokens.length == 3 && tokens[2].matches("(held|meta)"))
+		{
+			if (Minecraft.getMinecraft().thePlayer.getHeldItem() == null
+					|| Minecraft.getMinecraft().thePlayer.getHeldItem().getItem() == null)
+			{
+				LiteModStaffDerps.logError("Stahp trying to grab air");
+				return;
+			}
+			ItemStack heldItem = Minecraft.getMinecraft().thePlayer.getHeldItem();
+			this.items.clear();
+			this.meta.clear();
+			this.items.addFirst(Item.getIdFromItem(heldItem.getItem()));
+			if (tokens[2].equalsIgnoreCase("held"))
+			{
+				this.meta.addFirst(-1);
+				LiteModStaffDerps.logMessage("Grabbing " + heldItem.getDisplayName() + " with all metadata.", true);
+			}
+			else
+			{
+				this.meta.addFirst(heldItem.getItemDamage());
+				LiteModStaffDerps.logMessage("Grabbing " + heldItem.getDisplayName() + " with specific metadata.", true);
+			}
 		}
 		else if (tokens.length == 3 && this.presets.containsKey(tokens[2].toLowerCase()))
 		{
@@ -154,15 +189,17 @@ public class ChestSorter
 				this.meta.addFirst(0);
 			else if (tokens[2].equalsIgnoreCase("ores"))
 				this.meta.addFirst(4);
+			else if (tokens[2].equalsIgnoreCase("bonez"))
+				this.meta.addFirst(14);
 			
-			LiteModStaffDerps.logMessage("§8[§2StaffDerps§8] §aNow grabbing all items in the preset: " + tokens[2]);
+			LiteModStaffDerps.logMessage("Now grabbing all items in the preset: " + tokens[2], true);
 		}
 		else if (tokens.length == 3 && tokens[2].matches("presets?"))
 		{
-			String result = "§8[§2StaffDerps§8] §aAvailable presets:";
+			String result = "Available presets:";
 			for (String preset: this.presets.keySet())
 				result += " " + preset + ",";
-			LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".");
+			LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".", true);
 		}
 		else if (tokens.length == 3)
 		{
@@ -173,10 +210,10 @@ public class ChestSorter
 		else
 		{
 			LiteModStaffDerps.logError("Invalid parameters! Usage: /sd grab <item[,item2]>");
-			String result = "§8[§2StaffDerps§8] §aAvailable presets:";
+			String result = "Available presets:";
 			for (String preset: this.presets.keySet())
 				result += " " + preset + ",";
-			LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".");
+			LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".", true);
 		}
 	}
 }
