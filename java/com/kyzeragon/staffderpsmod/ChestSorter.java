@@ -190,7 +190,7 @@ public class ChestSorter
 			else if (tokens[2].equalsIgnoreCase("ores"))
 				this.meta.addFirst(4);
 			else if (tokens[2].equalsIgnoreCase("bonez"))
-				this.meta.addFirst(14);
+				this.meta.addFirst(15);
 			
 			LiteModStaffDerps.logMessage("Now grabbing all items in the preset: " + tokens[2], true);
 		}
