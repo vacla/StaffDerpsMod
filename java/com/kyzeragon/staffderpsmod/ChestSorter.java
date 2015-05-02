@@ -126,6 +126,16 @@ public class ChestSorter
 		LiteModStaffDerps.logMessage(result.substring(0, result.length() - 1) + ".", true);
 	}
 
+	public void dumpInventory(Container container)
+	{
+		this.container = container;
+		List<Slot> slots = this.container.inventorySlots;
+		for (int i = slots.size() - 36; i < slots.size(); i++)
+		{
+			Minecraft.getMinecraft().playerController.windowClick(container.windowId, i, 0, 1, Minecraft.getMinecraft().thePlayer);
+		}
+	}
+	
 	public void handleCommand(String message)
 	{
 		String[] tokens = message.split(" ");

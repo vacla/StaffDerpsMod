@@ -65,7 +65,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.1.10"; }
+	public String getVersion() { return "1.1.11"; }
 
 	@Override
 	public void init(File configPath)
@@ -102,6 +102,11 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			if (Keyboard.isKeyDown(Keyboard.KEY_TAB) && this.grabCooldown == 5)
 			{
 				this.chestSorter.grab(minecraft.thePlayer.openContainer);
+				this.grabCooldown = 0;
+			}
+			else if (Keyboard.isKeyDown(Keyboard.KEY_F1) && this.grabCooldown == 5)
+			{
+				this.chestSorter.dumpInventory(minecraft.thePlayer.openContainer);
 				this.grabCooldown = 0;
 			}
 		}
