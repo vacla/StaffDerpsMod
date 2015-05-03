@@ -50,7 +50,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	private SeeInvisible invis;
 	private PetOwner owner;
 	private LBFilter lbfilter;
-	private ChestSorter chestSorter;
+//	private ChestSorter chestSorter;
 
 	private boolean showOwner;
 	private boolean sentCmd;
@@ -65,7 +65,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.1.11"; }
+	public String getVersion() { return "1.1.12"; }
 
 	@Override
 	public void init(File configPath)
@@ -78,8 +78,8 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 
 		this.showOwner = false;
 		this.sentCmd = false;
-		this.chestSorter = new ChestSorter();
-		this.grabCooldown = 5;
+//		this.chestSorter = new ChestSorter();
+//		this.grabCooldown = 5;
 
 		leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
 		rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
@@ -94,7 +94,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	@Override
 	public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
 	{
-		if (inGame && minecraft.thePlayer.openContainer != null
+/*		if (inGame && minecraft.thePlayer.openContainer != null
 				&& !minecraft.thePlayer.openContainer.equals(minecraft.thePlayer.inventoryContainer))
 		{
 			if (this.grabCooldown < 5)
@@ -109,7 +109,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				this.chestSorter.dumpInventory(minecraft.thePlayer.openContainer);
 				this.grabCooldown = 0;
 			}
-		}
+		}*/
 
 		if (inGame && minecraft.currentScreen == null && Minecraft.isGuiEnabled())
 		{			
@@ -157,7 +157,8 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			}
 			else if (tokens[1].equalsIgnoreCase("grab"))
 			{
-				this.chestSorter.handleCommand(message);
+				this.logError("The /sd grab command is in ItemSorter mod now. Use /grab instead");
+//				this.chestSorter.handleCommand(message);
 			}
 			else if (tokens[1].equalsIgnoreCase("invis") || tokens[1].equalsIgnoreCase("invisible"))
 			{
