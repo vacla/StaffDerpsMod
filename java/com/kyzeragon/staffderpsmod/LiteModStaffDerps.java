@@ -65,7 +65,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.1.12"; }
+	public String getVersion() { return "1.1.13"; }
 
 	@Override
 	public void init(File configPath)
@@ -211,8 +211,8 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 					{
 						if (first != 10000000)
 						{
-							second = Integer.parseInt(tokens[i]) * 16;
-							first *= 16;
+							second = Integer.parseInt(tokens[i]) * 16 + 8;
+							first = first * 16 + 8;
 							Minecraft.getMinecraft().thePlayer.sendChatMessage(
 									"/tppos " + first + " 100 " + second);
 							return;
@@ -298,7 +298,6 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	@Override
 	public boolean onChat(S02PacketChat chatPacket, IChatComponent chat,
 			String message) {
-		System.out.println(message);
 		if (message.matches(".*nknown.*ommand.*") && this.sentCmd)
 		{
 			this.sentCmd = false;
