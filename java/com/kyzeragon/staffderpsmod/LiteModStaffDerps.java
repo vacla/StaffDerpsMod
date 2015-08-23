@@ -45,12 +45,13 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	///// FIELDS /////
 	private static KeyBinding leftBinding;
 	private static KeyBinding rightBinding;
+	private static KeyBinding summonBinding;
 
 	private CompassMath compassMath;
 	private SeeInvisible invis;
 	private PetOwner owner;
 	private LBFilter lbfilter;
-//	private ChestSorter chestSorter;
+	private MobSummoner summoner;
 
 	private boolean showOwner;
 	private boolean sentCmd;
@@ -65,7 +66,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.1.13"; }
+	public String getVersion() { return "1.2.0"; }
 
 	@Override
 	public void init(File configPath)
@@ -75,17 +76,18 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		this.owner = new PetOwner();
 		this.config = new StaffDerpsConfig();
 		this.lbfilter = new LBFilter();
+		this.summoner = new MobSummoner();
 
 		this.showOwner = false;
 		this.sentCmd = false;
-//		this.chestSorter = new ChestSorter();
-//		this.grabCooldown = 5;
 
-		leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
-		rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
+		this.leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
+		this.rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
+		this.summonBinding = new KeyBinding("key.summon", Keyboard.CHAR_NONE, "key.categories.litemods");
 
 		LiteLoader.getInput().registerKeyBinding(leftBinding);
 		LiteLoader.getInput().registerKeyBinding(rightBinding);
+		LiteLoader.getInput().registerKeyBinding(this.summonBinding);
 	}
 
 	@Override
@@ -94,25 +96,13 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	@Override
 	public void onTick(Minecraft minecraft, float partialTicks, boolean inGame, boolean clock)
 	{
-/*		if (inGame && minecraft.thePlayer.openContainer != null
-				&& !minecraft.thePlayer.openContainer.equals(minecraft.thePlayer.inventoryContainer))
-		{
-			if (this.grabCooldown < 5)
-				this.grabCooldown++;
-			if (Keyboard.isKeyDown(Keyboard.KEY_TAB) && this.grabCooldown == 5)
-			{
-				this.chestSorter.grab(minecraft.thePlayer.openContainer);
-				this.grabCooldown = 0;
-			}
-			else if (Keyboard.isKeyDown(Keyboard.KEY_F1) && this.grabCooldown == 5)
-			{
-				this.chestSorter.dumpInventory(minecraft.thePlayer.openContainer);
-				this.grabCooldown = 0;
-			}
-		}*/
-
 		if (inGame && minecraft.currentScreen == null && Minecraft.isGuiEnabled())
-		{			
+		{
+			if (LiteModStaffDerps.summonBinding.isPressed())
+			{
+				this.summoner.summon();
+			}
+			
 			if (LiteModStaffDerps.leftBinding.isPressed())
 				this.compassMath.jumpTo();
 			else if (LiteModStaffDerps.rightBinding.isPressed())
@@ -158,7 +148,6 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			else if (tokens[1].equalsIgnoreCase("grab"))
 			{
 				this.logError("The /sd grab command is in ItemSorter mod now. Use /grab instead");
-//				this.chestSorter.handleCommand(message);
 			}
 			else if (tokens[1].equalsIgnoreCase("invis") || tokens[1].equalsIgnoreCase("invisible"))
 			{
@@ -267,6 +256,17 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			{
 				this.lbfilter.handleCommand(message);
 			}
+			else if (tokens[1].equalsIgnoreCase("summon"))
+			{
+				this.summoner.setCommand(message.replaceAll("sd |staffderps ", ""));
+			}
+			else if (tokens[1].equalsIgnoreCase("scalar"))
+			{
+				if (tokens.length == 2)
+					this.summoner.showScalar();
+				else
+					this.summoner.setScalar(tokens[2]);
+			}
 			else if (tokens[1].equalsIgnoreCase("help"))
 			{
 				String[] commands = {"invis <on|off> - See through invisibility effect.",
@@ -274,7 +274,8 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 						"chunk <x> <y> - Teleport to chunk coords.",
 						"tp <coordinates> - Attempts to TP to poorly formatted coords.",
 						"lbf y <minY> <maxY> - Shows only lb entries within specified Y.",
-						"grab <item[,item2]> - Specify items to grab from container when pressing TAB.",
+						"summon <mob> ~x ~y ~z {[data]}",
+						"scalar <double> - Set the scalar for shooting the mob",
 				"help - This help message."};
 				this.logMessage("Staff Derps [v" + this.getVersion() + "] commands (alias /staffderps)", false);
 				for (String command: commands)
@@ -312,7 +313,8 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	 * Display location of invisible players if display is on.
 	 */
 	@Override
-	public void onPostRenderEntities(float partialTicks) {
+	public void onPostRenderEntities(float partialTicks) 
+	{
 		if (!this.config.getSeeInvisibleOn())
 			return;
 		// TODO: display player name too
