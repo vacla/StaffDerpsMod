@@ -1,4 +1,6 @@
-package com.kyzeragon.staffderpsmod;
+package io.github.kyzderp.staffderpsmod;
+
+import io.github.kyzderp.staffderpsmod.config.StaffDerpsConfig;
 
 import java.text.DecimalFormat;
 
@@ -7,15 +9,17 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class MobSummoner 
 {
+	private StaffDerpsConfig config;
 	private String command;
 	private double scalar;
 	private DecimalFormat df;
 
 	
-	public MobSummoner()
+	public MobSummoner(StaffDerpsConfig config)
 	{
-		this.command = "/summon Pig ~ ~1 ~ {Attributes:[{Name:generic.maxHealth,Base:1}]}";
-		this.scalar = 2;
+		this.config = config;
+		this.command = config.getSummon();
+		this.scalar = config.getScalar();
 		this.df = new DecimalFormat("0.0");
 	}
 	
@@ -49,6 +53,7 @@ public class MobSummoner
 			return;
 		}
 		this.scalar = n;
+		this.config.setScalar(this.scalar);
 		LiteModStaffDerps.logMessage("Summon vector scalar set to " + this.scalar, true);
 	}
 	
@@ -70,6 +75,7 @@ public class MobSummoner
 			return;
 		}
 		this.command = message;	
+		this.config.setSummon(this.command);
 		LiteModStaffDerps.logMessage("Summon command set: " + this.command, true);
 	}
 }

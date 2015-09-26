@@ -1,4 +1,4 @@
-package com.kyzeragon.staffderpsmod;
+package io.github.kyzderp.staffderpsmod;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;

@@ -1,4 +1,6 @@
-package com.kyzeragon.staffderpsmod;
+package io.github.kyzderp.staffderpsmod;
+
+import io.github.kyzderp.staffderpsmod.config.StaffDerpsConfig;
 
 import java.io.File;
 import java.util.List;
@@ -25,7 +27,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-import com.kyzeragon.staffderpsmod.config.StaffDerpsConfig;
 import com.mumfrey.liteloader.ChatFilter;
 import com.mumfrey.liteloader.OutboundChatListener;
 import com.mumfrey.liteloader.PostRenderListener;
@@ -66,7 +67,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.2.0"; }
+	public String getVersion() { return "1.2.1"; }
 
 	@Override
 	public void init(File configPath)
@@ -76,7 +77,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		this.owner = new PetOwner();
 		this.config = new StaffDerpsConfig();
 		this.lbfilter = new LBFilter();
-		this.summoner = new MobSummoner();
+		this.summoner = new MobSummoner(this.config);
 
 		this.showOwner = false;
 		this.sentCmd = false;

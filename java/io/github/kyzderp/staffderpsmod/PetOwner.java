@@ -1,4 +1,4 @@
-package com.kyzeragon.staffderpsmod;
+package io.github.kyzderp.staffderpsmod;
 
 import java.util.List;
 

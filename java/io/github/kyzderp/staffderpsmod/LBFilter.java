@@ -1,4 +1,4 @@
-package com.kyzeragon.staffderpsmod;
+package io.github.kyzderp.staffderpsmod;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
