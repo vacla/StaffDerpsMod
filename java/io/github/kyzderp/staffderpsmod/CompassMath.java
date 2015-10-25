@@ -1,9 +1,12 @@
 package io.github.kyzderp.staffderpsmod;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
@@ -23,7 +26,7 @@ public class CompassMath {
 	{
 		Vec3 vector = minecraft.thePlayer.getLookVec();
 		double prevX = minecraft.thePlayer.posX;
-		double prevY = minecraft.thePlayer.posY;
+		double prevY = minecraft.thePlayer.posY + 1.62;
 		double prevZ = minecraft.thePlayer.posZ;
 
 		boolean doesWallExist = false;
@@ -40,7 +43,7 @@ public class CompassMath {
 			int y = (int) Math.floor(prevY);
 			int z = (int) Math.floor(prevZ);
 
-			Block block = minecraft.theWorld.getBlock(x, y, z);
+			Block block = minecraft.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
 
 			if (canCollide(x, y, z))
 				doesWallExist = true;
@@ -74,7 +77,7 @@ public class CompassMath {
 	{
 		Vec3 vector = minecraft.thePlayer.getLookVec();
 		double prevX = minecraft.thePlayer.posX;
-		double prevY = minecraft.thePlayer.posY;
+		double prevY = minecraft.thePlayer.posY + 1.62;
 		double prevZ = minecraft.thePlayer.posZ;
 		ChatStyle style = new ChatStyle();
 		ChatComponentText message; 
@@ -89,7 +92,7 @@ public class CompassMath {
 			int y = (int) Math.floor(prevY);
 			int z = (int) Math.floor(prevZ);
 
-			Block block = minecraft.theWorld.getBlock(x, y, z);
+			Block block = minecraft.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
 
 			if (canCollide(x, y, z))
 			{
@@ -112,8 +115,10 @@ public class CompassMath {
 
 	private boolean canCollide(int x, int y, int z)
 	{
-		Block block = minecraft.theWorld.getBlock(x, y, z);
-		if (block.getCollisionBoundingBoxFromPool(minecraft.theWorld, x, y, z) != null)
+		BlockPos pos = new BlockPos(x, y, z);
+		IBlockState state = minecraft.theWorld.getBlockState(pos);
+		Block block = state.getBlock();
+		if (block.getCollisionBoundingBox(minecraft.theWorld, pos, state) != null)
 			return true;
 		return false;
 	}

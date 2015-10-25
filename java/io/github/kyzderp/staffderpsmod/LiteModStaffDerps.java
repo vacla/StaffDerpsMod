@@ -28,10 +28,12 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import com.mumfrey.liteloader.ChatFilter;
+import com.mumfrey.liteloader.OutboundChatFilter;
 import com.mumfrey.liteloader.OutboundChatListener;
 import com.mumfrey.liteloader.PostRenderListener;
 import com.mumfrey.liteloader.Tickable;
 import com.mumfrey.liteloader.core.LiteLoader;
+import com.mumfrey.liteloader.core.LiteLoaderEventBroker.ReturnValue;
 import com.mumfrey.liteloader.modconfig.ConfigStrategy;
 import com.mumfrey.liteloader.modconfig.ExposableOptions;
 
@@ -41,7 +43,7 @@ import com.mumfrey.liteloader.modconfig.ExposableOptions;
  * @author Kyzeragon
  */
 @ExposableOptions(strategy = ConfigStrategy.Versioned, filename="staffderpsmod.json")
-public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatListener, PostRenderListener
+public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilter, PostRenderListener
 {
 	///// FIELDS /////
 	private static KeyBinding leftBinding;
@@ -55,7 +57,6 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	private MobSummoner summoner;
 
 	private boolean showOwner;
-	private boolean sentCmd;
 	private int grabCooldown;
 
 	private StaffDerpsConfig config;
@@ -67,7 +68,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.2.1"; }
+	public String getVersion() { return "1.2.0"; }
 
 	@Override
 	public void init(File configPath)
@@ -80,7 +81,6 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 		this.summoner = new MobSummoner(this.config);
 
 		this.showOwner = false;
-		this.sentCmd = false;
 
 		this.leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
 		this.rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
@@ -103,7 +103,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			{
 				this.summoner.summon();
 			}
-			
+
 			if (LiteModStaffDerps.leftBinding.isPressed())
 				this.compassMath.jumpTo();
 			else if (LiteModStaffDerps.rightBinding.isPressed())
@@ -111,7 +111,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 
 			if (this.config.getSeeInvisibleOn())
 			{
-				FontRenderer fontRender = minecraft.fontRenderer;
+				FontRenderer fontRender = minecraft.fontRendererObj;
 				String invsPlayers = this.invis.getInvsString();
 				fontRender.drawStringWithShadow("Hidden players: " 
 						+ invsPlayers, 0, 0, 0xFFAA00);
@@ -119,7 +119,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 
 			if (this.config.getSeePetOwnerOn())
 			{
-				FontRenderer fontRender = minecraft.fontRenderer;
+				FontRenderer fontRender = minecraft.fontRendererObj;
 				String dogs = this.owner.getDogOwners();
 				String cats = this.owner.getCatOwners();
 				fontRender.drawStringWithShadow("Dogs: " 
@@ -131,7 +131,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	}
 
 	@Override
-	public void onSendChatMessage(C01PacketChatMessage packet, String message)
+	public boolean onSendChatMessage(String message)
 	{
 		String[] tokens = message.trim().split(" ");
 		if (tokens[0].equalsIgnoreCase("/staffderps") || tokens[0].equalsIgnoreCase("/sd"))
@@ -139,12 +139,11 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			while (message.matches(".*  .*"))
 				message = message.replaceAll("  ", " ");
 			tokens = message.split(" ");
-			this.sentCmd = true;
 			if (tokens.length < 2)
 			{
 				this.logMessage("Staff Derps [v" + this.getVersion() + "] by Kyzeragon", false);
 				this.logMessage("Type /sd help or /staffderps help for commands.", false);
-				return;
+				return false;
 			}
 			else if (tokens[1].equalsIgnoreCase("grab"))
 			{
@@ -184,8 +183,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 					if (result == null || result == "")
 						this.logError("No owners for any pets in range!");
 					else {
-						GuiScreen.setClipboardString(result);
-						this.logMessage("Owner UUID copied to clipboard.", true);
+						this.logMessage("Owner name is " + result, true);
 					}
 				}
 				else
@@ -205,7 +203,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 							first = first * 16 + 8;
 							Minecraft.getMinecraft().thePlayer.sendChatMessage(
 									"/tppos " + first + " 100 " + second);
-							return;
+							return false;
 						}
 						else
 							first = Integer.parseInt(tokens[i]);
@@ -232,7 +230,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 						if ("-0123456789 ".contains("" + c))
 							result += c;
 				}
-				while (result.matches(".*  .*")) // fix the y coord if too high
+				while (result.matches(".*  .*")) // Only 1 space pl0x
 					result = result.replaceAll("  ", " ");
 				String[] coords = result.trim().split(" ");
 				if (coords.length != 3)
@@ -240,16 +238,24 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 					for (String coord: coords)
 						System.out.println("\"" + coord + "\"");
 					this.logError("Invalid format: " + result);
-					return;
+					return false;
 				}
-				String y = coords[1];
-				if (Integer.parseInt(y) > 260)
+				coords[1] = coords[1].replaceAll("-", "");
+
+				// Sometimes people like to switch the y and the z... annoying.
+				int y = Integer.parseInt(coords[1]);
+				int z = Integer.parseInt(coords[2]);
+				if (y > 255 && (z >= 0 && z < 256))
+					result = coords[0] + " " + z + " " + y;
+				else if (y > 255)
 				{
-					y = y.substring(0, 3);
-					if (Integer.parseInt(y) > 260)
-						y = y.substring(0, 2);
+					String sub = coords[1].substring(0, 3);
+					if (Integer.parseInt(sub) > 255)
+						sub = sub.substring(0, 2);
+					result = coords[0] + " " + sub + " " + coords[2];
 				}
-				result = coords[0] + " " + y + " " + coords[2];
+				else
+					result = coords[0] + " " + y + " " + coords[2];
 				this.logMessage("Running /tppos " + result, true);
 				Minecraft.getMinecraft().thePlayer.sendChatMessage("/tppos " + result);
 			}
@@ -287,9 +293,11 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			{
 				this.logMessage("Staff Derps [v" + this.getVersion() + "] by Kyzeragon", false);
 				this.logMessage("Type /sd help or /staffderps help for commands.", false);
-				return;
+				return false;
 			}
+			return false;
 		}
+		return true;
 	}
 
 
@@ -298,14 +306,9 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 	 * and also prevents displaying of lb entries that should be filtered out
 	 */
 	@Override
-	public boolean onChat(S02PacketChat chatPacket, IChatComponent chat,
-			String message) {
-		if (message.matches(".*nknown.*ommand.*") && this.sentCmd)
-		{
-			this.sentCmd = false;
-			return false;
-		}
-		else if (message.matches("§r§6\\([0-9]+\\).*at .*:.*:.*"))
+	public boolean onChat(IChatComponent chat, String message, 
+			ReturnValue<IChatComponent> newMessage) {
+		if (message.matches("§r§6\\([0-9]+\\).*at .*:.*:.*"))
 			return this.lbfilter.handleEntry(message);
 		return true;
 	}
@@ -339,7 +342,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 				-(player.prevPosY + (player.posY - player.prevPosY) * partialTicks),
 				-(player.prevPosZ + (player.posZ - player.prevPosZ) * partialTicks));
 
-		Tessellator tess = Tessellator.instance;
+		Tessellator tess = Tessellator.getInstance();
 		List<EntityPlayer> players = this.invis.getInvsPlayers();
 		for (EntityPlayer currentPlayer: players)
 		{
@@ -347,35 +350,35 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatList
 			double y = currentPlayer.posY;
 			double z = currentPlayer.posZ - 0.3;
 			GL11.glLineWidth(3.0f);
-			tess.startDrawing(GL11.GL_LINE_LOOP);
-			tess.setColorRGBA(255, 0, 0, 200);
-			tess.addVertex(x, y, z);
-			tess.addVertex(x + 0.6, y, z);
-			tess.addVertex(x + 0.6, y, z + 0.6);
-			tess.addVertex(x, y, z + 0.6);
+			tess.getWorldRenderer().startDrawing(GL11.GL_LINE_LOOP);
+			tess.getWorldRenderer().setColorRGBA(255, 0, 0, 200);
+			tess.getWorldRenderer().addVertex(x, y, z);
+			tess.getWorldRenderer().addVertex(x + 0.6, y, z);
+			tess.getWorldRenderer().addVertex(x + 0.6, y, z + 0.6);
+			tess.getWorldRenderer().addVertex(x, y, z + 0.6);
 			tess.draw();
 
-			tess.startDrawing(GL11.GL_LINE_LOOP);
-			tess.setColorRGBA(255, 0, 0, 200);
-			tess.addVertex(x, y + 1.8, z);
-			tess.addVertex(x + 0.6, y + 1.8, z);
-			tess.addVertex(x + 0.6, y + 1.8, z + 0.6);
-			tess.addVertex(x, y + 1.8, z + 0.6);
+			tess.getWorldRenderer().startDrawing(GL11.GL_LINE_LOOP);
+			tess.getWorldRenderer().setColorRGBA(255, 0, 0, 200);
+			tess.getWorldRenderer().addVertex(x, y + 1.8, z);
+			tess.getWorldRenderer().addVertex(x + 0.6, y + 1.8, z);
+			tess.getWorldRenderer().addVertex(x + 0.6, y + 1.8, z + 0.6);
+			tess.getWorldRenderer().addVertex(x, y + 1.8, z + 0.6);
 			tess.draw();
 
-			tess.startDrawing(GL11.GL_LINES);
-			tess.setColorRGBA(255, 0, 0, 200);
-			tess.addVertex(x, y, z);
-			tess.addVertex(x, y + 1.8, z);
+			tess.getWorldRenderer().startDrawing(GL11.GL_LINES);
+			tess.getWorldRenderer().setColorRGBA(255, 0, 0, 200);
+			tess.getWorldRenderer().addVertex(x, y, z);
+			tess.getWorldRenderer().addVertex(x, y + 1.8, z);
 
-			tess.addVertex(x + 0.6, y, z);
-			tess.addVertex(x + 0.6, y + 1.8, z);
+			tess.getWorldRenderer().addVertex(x + 0.6, y, z);
+			tess.getWorldRenderer().addVertex(x + 0.6, y + 1.8, z);
 
-			tess.addVertex(x + 0.6, y, z + 0.6);
-			tess.addVertex(x + 0.6, y + 1.8, z + 0.6);
+			tess.getWorldRenderer().addVertex(x + 0.6, y, z + 0.6);
+			tess.getWorldRenderer().addVertex(x + 0.6, y + 1.8, z + 0.6);
 
-			tess.addVertex(x, y, z + 0.6);
-			tess.addVertex(x, y + 1.8, z + 0.6);
+			tess.getWorldRenderer().addVertex(x, y, z + 0.6);
+			tess.getWorldRenderer().addVertex(x, y + 1.8, z + 0.6);
 			tess.draw();
 		}
 

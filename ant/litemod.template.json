@@ -3,5 +3,5 @@
     "mcversion": "${litemodversion}",
     "revision": "${build.number}",
     "author": "${author}",
-    "description": "Staff derps.\n - WE compass equivalent\n - List and show invisible players\n - Find pet owners\n - TP to chunk coords\n - Easy tppos for badly formatted coords\n - Filter some lb logs\n - Mob cannon!"
+    "description": "Staff derps.\n - WE compass equivalent\n - List and show invisible players\n - Find pet owners\n - TP to chunk coords\n - Easy tppos for badly formatted coords\n - Filter some lb logs\n - Quick grab items\n - Mob cannon"
 }

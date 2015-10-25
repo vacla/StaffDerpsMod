@@ -19,7 +19,7 @@ public class SeeInvisible {
 	private List getPlayers()
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		this.bb = AxisAlignedBB.getBoundingBox(player.posX - 32, player.posY - 32, player.posZ - 32, 
+		this.bb = AxisAlignedBB.fromBounds(player.posX - 32, player.posY - 32, player.posZ - 32, 
 				player.posX + 32, player.posY + 32, player.posZ + 32);
 		return Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityPlayer.class, this.bb);
 	}

@@ -20,10 +20,10 @@
 	<property name="version"        value="1.2.1" />
 		
 	<!-- The Minecraft version the mod is for, appended to the output file name for reference -->
-	<property name="mcversion"      value="1.7.2" />
+	<property name="mcversion"      value="1.8" />
 		
 	<!-- The version inserted into the mod metadata to tell the loader what version of MC this mod is for -->
-	<property name="litemodversion" value="1.7.2_02" />
+	<property name="litemodversion" value="1.8" />
 		
 	<!-- Your name, this gets written into the mod metadata and jar metadata -->
 	<property name="author"         value="Kyzeragon" />
