@@ -1,4 +1,4 @@
-package io.github.kyzderp.staffderpsmod;
+package io.github.kyzderp.staffderpsmod.subfunctions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class SeeInvisible {
 	
@@ -19,7 +19,7 @@ public class SeeInvisible {
 	private List getPlayers()
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		this.bb = AxisAlignedBB.fromBounds(player.posX - 32, player.posY - 32, player.posZ - 32, 
+		this.bb = new AxisAlignedBB(player.posX - 32, player.posY - 32, player.posZ - 32, 
 				player.posX + 32, player.posY + 32, player.posZ + 32);
 		return Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityPlayer.class, this.bb);
 	}
@@ -61,7 +61,7 @@ public class SeeInvisible {
 					currentPlayer = (Entity)invsPlayers.get(i);
 				}
 			}
-			result += currentPlayer.getCommandSenderName() + "(" + currentDist + "m) ";
+			result += currentPlayer.getName() + "(" + currentDist + "m) ";
 			invsPlayers.remove(currentPlayer);
 		}
 		return result;

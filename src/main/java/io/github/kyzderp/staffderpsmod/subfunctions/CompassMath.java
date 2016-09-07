@@ -1,17 +1,13 @@
-package io.github.kyzderp.staffderpsmod;
+package io.github.kyzderp.staffderpsmod.subfunctions;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 public class CompassMath {
 
@@ -24,14 +20,14 @@ public class CompassMath {
 
 	public void passThrough()
 	{
-		Vec3 vector = minecraft.thePlayer.getLookVec();
+		Vec3d vector = minecraft.thePlayer.getLookVec();
 		double prevX = minecraft.thePlayer.posX;
 		double prevY = minecraft.thePlayer.posY + 1.62;
 		double prevZ = minecraft.thePlayer.posZ;
 
 		boolean doesWallExist = false;
-		ChatStyle style = new ChatStyle();
-		ChatComponentText message; 
+		Style style = new Style();
+		TextComponentString message; 
 
 		for (int i = 0; i < 512; i++)
 		{
@@ -64,23 +60,23 @@ public class CompassMath {
 		}
 
 		if (doesWallExist)
-			message = new ChatComponentText("Too much wall. You shall not pass!");
+			message = new TextComponentString("Too much wall. You shall not pass!");
 		else
-			message = new ChatComponentText("Nothing to pass through!");
+			message = new TextComponentString("Nothing to pass through!");
 
-		style.setColor(EnumChatFormatting.DARK_RED);
-		message.setChatStyle(style);
+		style.setColor(TextFormatting.DARK_RED);
+		message.setStyle(style);
 		minecraft.thePlayer.addChatMessage(message);
 	}
 
 	public void jumpTo()
 	{
-		Vec3 vector = minecraft.thePlayer.getLookVec();
+		Vec3d vector = minecraft.thePlayer.getLookVec();
 		double prevX = minecraft.thePlayer.posX;
 		double prevY = minecraft.thePlayer.posY + 1.62;
 		double prevZ = minecraft.thePlayer.posZ;
-		ChatStyle style = new ChatStyle();
-		ChatComponentText message; 
+		Style style = new Style();
+		TextComponentString message; 
 
 		for (int i = 0; i < 512; i++)
 		{
@@ -107,9 +103,9 @@ public class CompassMath {
 			}
 		}
 
-		message = new ChatComponentText("No block in sight (or too far)!");
-		style.setColor(EnumChatFormatting.DARK_RED);
-		message.setChatStyle(style);
+		message = new TextComponentString("No block in sight (or too far)!");
+		style.setColor(TextFormatting.DARK_RED);
+		message.setStyle(style);
 		minecraft.thePlayer.addChatMessage(message);
 	}
 
@@ -118,7 +114,7 @@ public class CompassMath {
 		BlockPos pos = new BlockPos(x, y, z);
 		IBlockState state = minecraft.theWorld.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block.getCollisionBoundingBox(minecraft.theWorld, pos, state) != null)
+		if (block.getCollisionBoundingBox(state, minecraft.theWorld, pos) != null)
 			return true;
 		return false;
 	}

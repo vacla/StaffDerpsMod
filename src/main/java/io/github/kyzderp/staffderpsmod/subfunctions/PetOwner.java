@@ -1,13 +1,13 @@
-package io.github.kyzderp.staffderpsmod;
+package io.github.kyzderp.staffderpsmod.subfunctions;
 
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public class PetOwner {
 
@@ -19,20 +19,27 @@ public class PetOwner {
 	private List getDog()
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		this.bb = AxisAlignedBB.fromBounds(player.posX - 4, player.posY - 4, player.posZ - 4, 
+		this.bb = new AxisAlignedBB(player.posX - 4, player.posY - 4, player.posZ - 4, 
 				player.posX + 4, player.posY + 4, player.posZ + 4);
-		return Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityWolf.class, this.bb);
+		List stuff = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityWolf.class, this.bb);
+		return stuff;
 	}
 	
 	public String getDogOwners()
 	{
 		String result = "";
-		for (Object dog: this.getDog())
+		List dogs = this.getDog();
+		if (dogs == null)
+			return "";
+		for (Object dog: dogs)
 		{
-			String name = ((EntityWolf)dog).getOwner().getCommandSenderName();
+			Entity owner = ((EntityWolf)dog).getOwner();
+			if (owner == null)
+				return "";
+			String name = owner.getName();
 			if (name != null && name != "")
 				this.randomOwner = name;
-			result += ((EntityWolf)dog).getCommandSenderName() + " ";			
+			result += ((EntityWolf)dog).getName() + " ";			
 		}
 		return result;
 	}
@@ -40,7 +47,7 @@ public class PetOwner {
 	private List getCat()
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		this.bb = AxisAlignedBB.fromBounds(player.posX - 2, player.posY - 2, player.posZ - 2, 
+		this.bb = new AxisAlignedBB(player.posX - 2, player.posY - 2, player.posZ - 2, 
 				player.posX + 2, player.posY + 2, player.posZ + 2);
 		return Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityOcelot.class, this.bb);
 	}
@@ -48,12 +55,18 @@ public class PetOwner {
 	public String getCatOwners()
 	{
 		String result = "";
-		for (Object cat: this.getCat())
+		List cats = this.getCat();
+		if (cats == null)
+			return "";
+		for (Object cat: cats)
 		{
-			String name = ((EntityOcelot)cat).getOwner().getCommandSenderName();
+			Entity owner = ((EntityOcelot)cat).getOwner();
+			if (owner == null)
+				return "";
+			String name = owner.getName();
 			if (name != null && name != "")
 				this.randomOwner = name;
-			result += ((EntityOcelot)cat).getCommandSenderName() + " ";			
+			result += ((EntityOcelot)cat).getName() + " ";			
 		}
 		return result;
 	}

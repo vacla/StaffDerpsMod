@@ -1,9 +1,9 @@
-package io.github.kyzderp.staffderpsmod;
+package io.github.kyzderp.staffderpsmod.subfunctions;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 
 public class LBFilter 
 {
@@ -93,8 +93,8 @@ public class LBFilter
 	 */
 	private String logMessage(String message)
 	{
-		ChatComponentText displayMessage = new ChatComponentText(message);
-		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.AQUA));
+		TextComponentString displayMessage = new TextComponentString(message);
+		displayMessage.setStyle((new Style()).setColor(TextFormatting.AQUA));
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
 		return message;
 	}
@@ -105,8 +105,8 @@ public class LBFilter
 	 */
 	private String logError(String message)
 	{
-		ChatComponentText displayMessage = new ChatComponentText(message);
-		displayMessage.setChatStyle((new ChatStyle()).setColor(EnumChatFormatting.RED));
+		TextComponentString displayMessage = new TextComponentString(message);
+		displayMessage.setStyle((new Style()).setColor(TextFormatting.RED));
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
 		return message;
 	}

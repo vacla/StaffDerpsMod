@@ -1,5 +1,6 @@
-package io.github.kyzderp.staffderpsmod;
+package io.github.kyzderp.staffderpsmod.subfunctions;
 
+import io.github.kyzderp.staffderpsmod.LiteModStaffDerps;
 import io.github.kyzderp.staffderpsmod.config.StaffDerpsConfig;
 
 import java.text.DecimalFormat;
