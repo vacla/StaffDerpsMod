@@ -6,8 +6,6 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public class SeeInvisible {
@@ -16,7 +14,7 @@ public class SeeInvisible {
 
 	public SeeInvisible(){}
 	
-	private List getPlayers()
+	private List<EntityPlayer> getPlayers()
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		this.bb = new AxisAlignedBB(player.posX - 32, player.posY - 32, player.posZ - 32, 
@@ -26,25 +24,25 @@ public class SeeInvisible {
 	
 	public List<EntityPlayer> getInvsPlayers()
 	{
-		List playerList = new ArrayList<EntityPlayer>();
+		List<EntityPlayer> playerList = new ArrayList<EntityPlayer>();
 		
 		for (Object player: this.getPlayers())
 		{
 			if (((EntityPlayer) player).isInvisible())
 			{
-				playerList.add(player);
+				playerList.add((EntityPlayer) player);
 			}
 		}
 		return playerList;
 	}
 
-	public String getInvsString() {
+	public String getInvsString() 
+	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		List invsPlayers = this.getInvsPlayers();
+		List<EntityPlayer> invsPlayers = this.getInvsPlayers();
 		if (invsPlayers.contains(player))
 			invsPlayers.remove(player);
 		int n = invsPlayers.size();
-		List sortedInvsPlayers = new ArrayList();
 		String result = "";
 		
 		for (int j = 0; j < n; j++)

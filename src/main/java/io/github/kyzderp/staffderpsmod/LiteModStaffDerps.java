@@ -58,9 +58,6 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 	private final MobSummoner summoner = new MobSummoner(this.getConfig());
 	private final Commands commands = new Commands(this);
 
-	private boolean showOwner;
-	private int grabCooldown;
-
 
 	///// METHODS /////
 	public LiteModStaffDerps() {}
@@ -74,15 +71,13 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 	@Override
 	public void init(File configPath)
 	{
-		this.showOwner = false;
-
-		this.leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
-		this.rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
-		this.summonBinding = new KeyBinding("key.summon", Keyboard.CHAR_NONE, "key.categories.litemods");
+		LiteModStaffDerps.leftBinding = new KeyBinding("key.compass.left", -97, "key.categories.litemods");
+		LiteModStaffDerps.rightBinding = new KeyBinding("key.compass.right", -96, "key.categories.litemods");
+		LiteModStaffDerps.summonBinding = new KeyBinding("key.summon", Keyboard.CHAR_NONE, "key.categories.litemods");
 
 		LiteLoader.getInput().registerKeyBinding(leftBinding);
 		LiteLoader.getInput().registerKeyBinding(rightBinding);
-		LiteLoader.getInput().registerKeyBinding(this.summonBinding);
+		LiteLoader.getInput().registerKeyBinding(LiteModStaffDerps.summonBinding);
 	}
 
 	@Override

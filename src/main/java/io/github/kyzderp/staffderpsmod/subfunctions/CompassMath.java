@@ -39,7 +39,7 @@ public class CompassMath {
 			int y = (int) Math.floor(prevY);
 			int z = (int) Math.floor(prevZ);
 
-			Block block = minecraft.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+//			Block block = minecraft.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
 
 			if (canCollide(x, y, z))
 				doesWallExist = true;
@@ -88,7 +88,7 @@ public class CompassMath {
 			int y = (int) Math.floor(prevY);
 			int z = (int) Math.floor(prevZ);
 
-			Block block = minecraft.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
+//			Block block = minecraft.theWorld.getBlockState(new BlockPos(x, y, z)).getBlock();
 
 			if (canCollide(x, y, z))
 			{
@@ -109,6 +109,7 @@ public class CompassMath {
 		minecraft.thePlayer.addChatMessage(message);
 	}
 
+	@SuppressWarnings("deprecation")
 	private boolean canCollide(int x, int y, int z)
 	{
 		BlockPos pos = new BlockPos(x, y, z);

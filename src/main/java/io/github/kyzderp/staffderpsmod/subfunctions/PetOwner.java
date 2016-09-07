@@ -16,19 +16,19 @@ public class PetOwner {
 
 	public PetOwner(){}
 	
-	private List getDog()
+	private List<EntityWolf> getDog()
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		this.bb = new AxisAlignedBB(player.posX - 4, player.posY - 4, player.posZ - 4, 
 				player.posX + 4, player.posY + 4, player.posZ + 4);
-		List stuff = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityWolf.class, this.bb);
+		List<EntityWolf> stuff = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityWolf.class, this.bb);
 		return stuff;
 	}
 	
 	public String getDogOwners()
 	{
 		String result = "";
-		List dogs = this.getDog();
+		List<EntityWolf> dogs = this.getDog();
 		if (dogs == null)
 			return "";
 		for (Object dog: dogs)
@@ -44,7 +44,7 @@ public class PetOwner {
 		return result;
 	}
 	
-	private List getCat()
+	private List<EntityOcelot> getCat()
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		this.bb = new AxisAlignedBB(player.posX - 2, player.posY - 2, player.posZ - 2, 
@@ -55,7 +55,7 @@ public class PetOwner {
 	public String getCatOwners()
 	{
 		String result = "";
-		List cats = this.getCat();
+		List<EntityOcelot> cats = this.getCat();
 		if (cats == null)
 			return "";
 		for (Object cat: cats)
