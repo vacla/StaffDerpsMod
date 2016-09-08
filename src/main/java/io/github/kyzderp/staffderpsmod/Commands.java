@@ -18,8 +18,10 @@ public class Commands
 		
 		if (tokens.length < 2)
 		{
-			LiteModStaffDerps.logMessage("Staff Derps [v" + this.main.getVersion() + "] by Kyzeragon", false);
-			LiteModStaffDerps.logMessage("Type /sd help or /staffderps help for commands.", false);
+			LiteModStaffDerps.logMessage("Staff Derps \u00A78[\u00A7av" + this.main.getVersion() 
+					+ "\u00A78] by \u00A72Kyzeragon", false);
+			LiteModStaffDerps.logMessage("Type \u00A72/sd help \u00A7aor "
+					+ "\u00A72/staffderps help \u00A7afor commands.", false);
 		}
 		else if (tokens[1].equalsIgnoreCase("invis") || tokens[1].equalsIgnoreCase("invisible"))
 		{
@@ -54,12 +56,14 @@ public class Commands
 		}
 		else if (tokens[1].equalsIgnoreCase("help"))
 		{
-			helpCommand();
+			this.helpCommand();
 		}
 		else
 		{
-			LiteModStaffDerps.logMessage("Staff Derps [v" + this.main.getVersion() + "] by Kyzeragon", false);
-			LiteModStaffDerps.logMessage("Type /sd help or /staffderps help for commands.", false);
+			LiteModStaffDerps.logMessage("Staff Derps \u00A78[\u00A7av" + this.main.getVersion() 
+					+ "\u00A78] by \u00A72Kyzeragon", false);
+			LiteModStaffDerps.logMessage("Type \u00A72/sd help \u00A7aor "
+					+ "\u00A72/staffderps help \u00A7afor commands.", false);
 		}
 	}
 
@@ -69,13 +73,13 @@ public class Commands
 	 */
 	private void helpCommand() 
 	{
-		String[] commands = {"invis <on|off> - See through invisibility effect.",
-				"pet <on|off|copy> - Get pet owner.",
-				"chunk <x> <y> - Teleport to chunk coords.",
-				"tp <coordinates> - Attempts to TP to poorly formatted coords.",
-				"lbf y <minY> <maxY> - Shows only lb entries within specified Y.",
-				"summon <mob> ~x ~y ~z {[data]}",
-				"scalar <double> - Set the scalar for shooting the mob",
+		String[] commands = {"invis <on|off> \u00A77- See through invisibility effect.",
+				"pet <on|off|copy> \u00A77- Get pet owner.",
+				"chunk <x> <y> \u00A77- Teleport to chunk coords.",
+				"tp <coordinates> \u00A77- Attempts to TP to poorly formatted coords.",
+				"lbf y <minY> <maxY> \u00A77- Shows only lb entries within specified Y.",
+				"summon <mob> ~x ~y ~z {[data]} \u00A77- Pew pew!",
+				"scalar <double> \u00A77- Set the scalar for shooting the mob",
 		"help - This help message."};
 		LiteModStaffDerps.logMessage("Staff Derps [v" + this.main.getVersion() + "] commands (alias /staffderps)", false);
 		for (String command: commands)

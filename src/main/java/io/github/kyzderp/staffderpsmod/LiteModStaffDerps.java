@@ -66,7 +66,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 	public String getName() { return "Staff Derps"; }
 
 	@Override
-	public String getVersion() { return "1.3.0"; }
+	public String getVersion() { return "1.3.1"; }
 
 	@Override
 	public void init(File configPath)
@@ -142,7 +142,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 	@Override
 	public boolean onChat(ITextComponent chat, String message, 
 			ReturnValue<ITextComponent> newMessage) {
-		if (message.matches("§r§6\\([0-9]+\\).*at .*:.*:.*"))
+		if (message.matches("\u00A7r\u00A76\\([0-9]+\\).*at .*:.*:.*"))
 			return this.getLbfilter().handleEntry(message);
 		return true;
 	}
@@ -238,7 +238,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 	public static void logMessage(String message, boolean addPrefix)
 	{
 		if (addPrefix)
-			message = "[StaffDerps] " + message;
+			message = "\u00A78[\u00A72StaffDerps\u00A79] \u00A7a" + message;
 		TextComponentString displayMessage = new TextComponentString(message);
 		displayMessage.setStyle((new Style()).setColor(TextFormatting.GREEN));
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
@@ -250,7 +250,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 	 */
 	public static void logError(String message)
 	{
-		TextComponentString displayMessage = new TextComponentString("[StaffDerps] " + message);
+		TextComponentString displayMessage = new TextComponentString("\u00A78[\u00A7cStaffDerps\u00A78] \u00A7c" + message);
 		displayMessage.setStyle((new Style()).setColor(TextFormatting.RED));
 		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
 	}
