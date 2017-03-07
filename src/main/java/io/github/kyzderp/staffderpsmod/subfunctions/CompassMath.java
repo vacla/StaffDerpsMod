@@ -20,10 +20,10 @@ public class CompassMath {
 
 	public void passThrough()
 	{
-		Vec3d vector = minecraft.thePlayer.getLookVec();
-		double prevX = minecraft.thePlayer.posX;
-		double prevY = minecraft.thePlayer.posY + 1.62;
-		double prevZ = minecraft.thePlayer.posZ;
+		Vec3d vector = minecraft.player.getLookVec();
+		double prevX = minecraft.player.posX;
+		double prevY = minecraft.player.posY + 1.62;
+		double prevZ = minecraft.player.posZ;
 
 		boolean doesWallExist = false;
 		Style style = new Style();
@@ -48,12 +48,12 @@ public class CompassMath {
 			{
 				if (!canCollide(x, y + 1, z) && !canCollide(x, y, z))
 				{
-					minecraft.thePlayer.sendChatMessage("/tppos " + x + " " + y + " " + z);
+					minecraft.player.sendChatMessage("/tppos " + x + " " + y + " " + z);
 					return;
 				}
 				else if (!canCollide(x, y, z) && !canCollide(x, y - 1, z))
 				{
-					minecraft.thePlayer.sendChatMessage("/tppos " + x + " " + (y - 1) + " " + z);
+					minecraft.player.sendChatMessage("/tppos " + x + " " + (y - 1) + " " + z);
 					return;
 				}
 			}
@@ -66,15 +66,15 @@ public class CompassMath {
 
 		style.setColor(TextFormatting.DARK_RED);
 		message.setStyle(style);
-		minecraft.thePlayer.addChatMessage(message);
+		minecraft.player.sendMessage(message);
 	}
 
 	public void jumpTo()
 	{
-		Vec3d vector = minecraft.thePlayer.getLookVec();
-		double prevX = minecraft.thePlayer.posX;
-		double prevY = minecraft.thePlayer.posY + 1.62;
-		double prevZ = minecraft.thePlayer.posZ;
+		Vec3d vector = minecraft.player.getLookVec();
+		double prevX = minecraft.player.posX;
+		double prevY = minecraft.player.posY + 1.62;
+		double prevZ = minecraft.player.posZ;
 		Style style = new Style();
 		TextComponentString message; 
 
@@ -96,7 +96,7 @@ public class CompassMath {
 				{
 					if (!canCollide(x, j + 1, z) && !canCollide(x, j + 2, z))
 					{
-						minecraft.thePlayer.sendChatMessage("/tppos " + x + " " + (j + 1) + " " + z);
+						minecraft.player.sendChatMessage("/tppos " + x + " " + (j + 1) + " " + z);
 						return;
 					}
 				}
@@ -106,16 +106,16 @@ public class CompassMath {
 		message = new TextComponentString("No block in sight (or too far)!");
 		style.setColor(TextFormatting.DARK_RED);
 		message.setStyle(style);
-		minecraft.thePlayer.addChatMessage(message);
+		minecraft.player.sendMessage(message);
 	}
 
 	@SuppressWarnings("deprecation")
 	private boolean canCollide(int x, int y, int z)
 	{
 		BlockPos pos = new BlockPos(x, y, z);
-		IBlockState state = minecraft.theWorld.getBlockState(pos);
+		IBlockState state = minecraft.world.getBlockState(pos);
 		Block block = state.getBlock();
-		if (block.getCollisionBoundingBox(state, minecraft.theWorld, pos) != null)
+		if (block.getCollisionBoundingBox(state, minecraft.world, pos) != null)
 			return true;
 		return false;
 	}

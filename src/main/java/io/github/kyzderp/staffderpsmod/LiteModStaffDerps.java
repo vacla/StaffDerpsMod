@@ -170,7 +170,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 		GlStateManager.disableFog();
 		GlStateManager.pushMatrix();
 
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		GlStateManager.translate(-(player.prevPosX + (player.posX - player.prevPosX) * partialTicks),
 				-(player.prevPosY + (player.posY - player.prevPosY) * partialTicks),
 				-(player.prevPosZ + (player.posZ - player.prevPosZ) * partialTicks));
@@ -241,7 +241,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 			message = "\u00A78[\u00A72StaffDerps\u00A79] \u00A7a" + message;
 		TextComponentString displayMessage = new TextComponentString(message);
 		displayMessage.setStyle((new Style()).setColor(TextFormatting.GREEN));
-		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
+		Minecraft.getMinecraft().player.sendMessage(displayMessage);
 	}
 
 	/**
@@ -252,7 +252,7 @@ public class LiteModStaffDerps implements Tickable, ChatFilter, OutboundChatFilt
 	{
 		TextComponentString displayMessage = new TextComponentString("\u00A78[\u00A7cStaffDerps\u00A78] \u00A7c" + message);
 		displayMessage.setStyle((new Style()).setColor(TextFormatting.RED));
-		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
+		Minecraft.getMinecraft().player.sendMessage(displayMessage);
 	}
 
 	@Override
