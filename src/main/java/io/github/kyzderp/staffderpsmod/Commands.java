@@ -138,7 +138,7 @@ public class Commands
 		else
 			result = coords[0] + " " + y + " " + coords[2];
 		LiteModStaffDerps.logMessage("Running /tppos " + result, true);
-		Minecraft.getMinecraft().thePlayer.sendChatMessage("/tppos " + result);
+		Minecraft.getMinecraft().player.sendChatMessage("/tppos " + result);
 	}
 
 
@@ -157,7 +157,7 @@ public class Commands
 				{
 					second = Integer.parseInt(tokens[i]) * 16 + 8;
 					first = first * 16 + 8;
-					Minecraft.getMinecraft().thePlayer.sendChatMessage(
+					Minecraft.getMinecraft().player.sendChatMessage(
 							"/tppos " + first + " 100 " + second);
 					return;
 				}

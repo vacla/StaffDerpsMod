@@ -26,7 +26,7 @@ public class MobSummoner
 	
 	public void summon()
 	{
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		
 		double x = player.getLookVec().xCoord * this.scalar;
 		double y = player.getLookVec().yCoord * this.scalar;
@@ -36,7 +36,7 @@ public class MobSummoner
 		if (this.command.contains(":"))
 			result = "," + result;
 		result = this.command.substring(0, this.command.length() - 1) + result + "}";
-		Minecraft.getMinecraft().thePlayer.sendChatMessage(result);
+		Minecraft.getMinecraft().player.sendChatMessage(result);
 	}
 	
 	public void setScalar(String message)
