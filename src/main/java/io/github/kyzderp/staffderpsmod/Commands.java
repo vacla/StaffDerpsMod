@@ -19,7 +19,7 @@ public class Commands
 		if (tokens.length < 2)
 		{
 			LiteModStaffDerps.logMessage("Staff Derps \u00A78[\u00A7av" + this.main.getVersion() 
-					+ "\u00A78] by \u00A72Kyzeragon", false);
+					+ "\u00A78] \u00A7aby \u00A72Kyzeragon", false);
 			LiteModStaffDerps.logMessage("Type \u00A72/sd help \u00A7aor "
 					+ "\u00A72/staffderps help \u00A7afor commands.", false);
 		}
@@ -80,7 +80,7 @@ public class Commands
 				"lbf y <minY> <maxY> \u00A77- Shows only lb entries within specified Y.",
 				"summon <mob> ~x ~y ~z {[data]} \u00A77- Pew pew!",
 				"scalar <double> \u00A77- Set the scalar for shooting the mob",
-		"help - This help message."};
+				"help \u00A77- This help message."};
 		LiteModStaffDerps.logMessage("Staff Derps [v" + this.main.getVersion() + "] commands (alias /staffderps)", false);
 		for (String command: commands)
 			LiteModStaffDerps.logMessage("/sd " + command, false);
@@ -138,7 +138,7 @@ public class Commands
 		else
 			result = coords[0] + " " + y + " " + coords[2];
 		LiteModStaffDerps.logMessage("Running /tppos " + result, true);
-		Minecraft.getMinecraft().thePlayer.sendChatMessage("/tppos " + result);
+		Minecraft.getMinecraft().player.sendChatMessage("/tppos " + result);
 	}
 
 
@@ -157,7 +157,7 @@ public class Commands
 				{
 					second = Integer.parseInt(tokens[i]) * 16 + 8;
 					first = first * 16 + 8;
-					Minecraft.getMinecraft().thePlayer.sendChatMessage(
+					Minecraft.getMinecraft().player.sendChatMessage(
 							"/tppos " + first + " 100 " + second);
 					return;
 				}

@@ -16,10 +16,10 @@ public class SeeInvisible {
 	
 	private List<EntityPlayer> getPlayers()
 	{
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		this.bb = new AxisAlignedBB(player.posX - 32, player.posY - 32, player.posZ - 32, 
 				player.posX + 32, player.posY + 32, player.posZ + 32);
-		return Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(EntityPlayer.class, this.bb);
+		return Minecraft.getMinecraft().world.getEntitiesWithinAABB(EntityPlayer.class, this.bb);
 	}
 	
 	public List<EntityPlayer> getInvsPlayers()
@@ -38,7 +38,7 @@ public class SeeInvisible {
 
 	public String getInvsString() 
 	{
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		List<EntityPlayer> invsPlayers = this.getInvsPlayers();
 		if (invsPlayers.contains(player))
 			invsPlayers.remove(player);

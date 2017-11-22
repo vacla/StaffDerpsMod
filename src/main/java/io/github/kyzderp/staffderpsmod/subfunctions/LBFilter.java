@@ -95,7 +95,7 @@ public class LBFilter
 	{
 		TextComponentString displayMessage = new TextComponentString(message);
 		displayMessage.setStyle((new Style()).setColor(TextFormatting.AQUA));
-		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
+		Minecraft.getMinecraft().player.sendMessage(displayMessage);
 		return message;
 	}
 
@@ -107,7 +107,7 @@ public class LBFilter
 	{
 		TextComponentString displayMessage = new TextComponentString(message);
 		displayMessage.setStyle((new Style()).setColor(TextFormatting.RED));
-		Minecraft.getMinecraft().thePlayer.addChatComponentMessage(displayMessage);
+		Minecraft.getMinecraft().player.sendMessage(displayMessage);
 		return message;
 	}
 }
