@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/main/java">
+		<attributes>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src/main/resources">
+		<attributes>
+			<attribute name="FROM_GRADLE_MODEL" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="C:/Users/Amurtiger224/.gradle/caches/minecraft/deobfedDeps/deobf/com/mumfrey/liteloader/1.12.2-SNAPSHOT/liteloader-1.12.2-SNAPSHOT.jar" sourcepath="C:/Users/Amurtiger224/.gradle/caches/minecraft/deobfedDeps/deobf/com/mumfrey/liteloader/1.12.2-SNAPSHOT/liteloader-1.12.2-SNAPSHOT-sources.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Amurtiger224/.gradle/caches/minecraft/net/minecraft/minecraft/1.12.2/snapshot/20170929/minecraftSrc-1.12.2.jar" sourcepath="C:/Users/Amurtiger224/.gradle/caches/minecraft/net/minecraft/minecraft/1.12.2/snapshot/20170929/minecraftSrc-1.12.2-sources.jar"/>
@@ -50,5 +58,6 @@
 	<classpathentry kind="lib" path="C:/Users/Amurtiger224/.gradle/caches/minecraft/deobfedDeps/compileDummy.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Amurtiger224/.gradle/caches/minecraft/deobfedDeps/providedDummy.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Amurtiger224/.gradle/caches/minecraft/net/minecraft/minecraft/1.12.2/start"/>
+	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

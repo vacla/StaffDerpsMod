@@ -22,7 +22,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle.liteloader'
 
-version = "1.3.2"
+version = "1.4.0"
 group = "io.github.kyzderp.staffderpsmod" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "staffderps"
 
