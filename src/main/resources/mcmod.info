@@ -1,0 +1,17 @@
+[
+    {
+        "modid": "staffderpsmod",
+        "name": "StaffDerpsMod",
+        "description": "A re-creation of/substitute for StaffDerpsMod for Rift",
+        "version": "${mod_version}",
+        "mcversion": "${minecraft_version}",
+        "url": "",
+        "updateUrl": "",
+        "authorList": ["Arnevdl29"],
+        "credits": "Kyzderp",
+        "logoFile": "",
+        "screenshots": [],
+        "requiredMods": ["malilib"],
+        "dependencies": ["malilib"]
+    }
+]

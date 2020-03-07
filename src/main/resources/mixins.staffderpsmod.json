@@ -1,0 +1,14 @@
+{
+    "required": true,
+    "package": "eu.minemania.staffderpsmod.mixin",
+    "refmap": "mixins.staffderpsmod.refmap.json",
+    "minVersion": "0.6",
+    "client": [
+        "MixinEntityPlayerSP",
+        "MixinGuiChat",
+        "MixinNetHandlerPlayClient"
+    ],
+    "injectors": {
+    	"defaultRequire": 1
+    }
+}
