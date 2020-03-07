@@ -1,0 +1,6 @@
+{
+    "id": "staffderpsmod",
+    "name": "StaffDerpsMod",
+    "authors": [ "Arnevdl29" ],
+    "listeners": [ "eu.minemania.staffderpsmod.StaffDerpsMod" ]
+}
