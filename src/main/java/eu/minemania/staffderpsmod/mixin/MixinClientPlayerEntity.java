@@ -4,7 +4,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.mojang.brigadier.StringReader;
 import eu.minemania.staffderpsmod.command.ClientCommandManager;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -13,7 +12,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 public class MixinClientPlayerEntity
 {
     @Inject(method = "sendChatMessage(Ljava/lang/String;)V", at = @At("HEAD"), cancellable = true)
-    private void onSendChatMessageSDP(String message, CallbackInfo ci)
+    private void onSendChatMessageSDM(String message, CallbackInfo ci)
     {
         if (message.startsWith("/"))
         {

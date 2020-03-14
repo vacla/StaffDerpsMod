@@ -68,7 +68,7 @@ public class ClientCommandManager
         }
         catch (CommandException e)
         {
-            ClientCommandManager.sendError(e.getMessageText());
+            ClientCommandManager.sendError(e.getTextMessage());
         }
         catch (CommandSyntaxException e)
         {

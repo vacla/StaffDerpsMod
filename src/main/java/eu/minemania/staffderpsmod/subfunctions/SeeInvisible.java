@@ -17,8 +17,8 @@ public class SeeInvisible
     private List<PlayerEntity> getPlayers()
     {
         PlayerEntity player = MinecraftClient.getInstance().player;
-        this.bb = new Box(player.x - 32, player.y - 32, player.z - 32, player.x + 32, player.y + 32, player.z + 32);
-        return MinecraftClient.getInstance().world.getEntities(PlayerEntity.class, this.bb);
+        this.bb = new Box(player.getX() - 32, player.getY() - 32, player.getZ() - 32, player.getX() + 32, player.getY() + 32, player.getZ() + 32);
+        return MinecraftClient.getInstance().world.getNonSpectatingEntities(PlayerEntity.class, this.bb);
     }
 
     public List<PlayerEntity> getInvsPlayers()
@@ -68,6 +68,6 @@ public class SeeInvisible
 
     private int distanceToMob(Entity e1, Entity e2)
     {
-        return (int) Math.sqrt(Math.pow((e1.x - e2.x), 2) + Math.pow((e1.y - e2.y), 2) + Math.pow((e1.z - e2.z), 2));
+        return (int) Math.sqrt(Math.pow((e1.getX() - e2.getX()), 2) + Math.pow((e1.getY() - e2.getY()), 2) + Math.pow((e1.getZ() - e2.getZ()), 2));
     }
 }

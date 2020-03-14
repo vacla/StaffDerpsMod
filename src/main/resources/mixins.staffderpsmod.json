@@ -1,11 +1,12 @@
 {
     "required": true,
     "package": "eu.minemania.staffderpsmod.mixin",
-    "minVersion": "0.6",
+    "minVersion": "0.7",
     "client": [
-        "MixinChatScreen",
         "MixinClientPlayerEntity",
-        "MixinClientPlayNetworkHandler"
+        "MixinClientPlayNetworkHandler",
+        "MixinCommandSuggestor",
+        "MixinTextFieldWidget"
     ],
     "injectors": {
     	"defaultRequire": 1

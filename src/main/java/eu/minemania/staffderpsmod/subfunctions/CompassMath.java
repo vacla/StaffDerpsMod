@@ -20,9 +20,9 @@ public class CompassMath
     public void passThrough()
     {
         Vec3d vector = minecraft.player.getRotationVector();
-        double prevX = minecraft.player.x;
-        double prevY = minecraft.player.y + 1.62;
-        double prevZ = minecraft.player.z;
+        double prevX = minecraft.player.getX();
+        double prevY = minecraft.player.getY() + 1.62;
+        double prevZ = minecraft.player.getZ();
 
         boolean doesWallExist = false;
         Style style = new Style();
@@ -75,9 +75,9 @@ public class CompassMath
     public void jumpTo()
     {
         Vec3d vector = minecraft.player.getRotationVector();
-        double prevX = minecraft.player.x;
-        double prevY = minecraft.player.y + 1.62;
-        double prevZ = minecraft.player.z;
+        double prevX = minecraft.player.getX();
+        double prevY = minecraft.player.getY() + 1.62;
+        double prevZ = minecraft.player.getZ();
         Style style = new Style();
         LiteralText message;
 

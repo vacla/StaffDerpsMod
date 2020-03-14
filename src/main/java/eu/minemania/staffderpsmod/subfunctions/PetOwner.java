@@ -20,8 +20,8 @@ public class PetOwner
     private List<WolfEntity> getDog()
     {
         PlayerEntity player = MinecraftClient.getInstance().player;
-        this.bb = new Box(player.x - 4, player.y - 4, player.z - 4, player.x + 4, player.y + 4, player.z + 4);
-        List<WolfEntity> stuff = MinecraftClient.getInstance().world.getEntities(WolfEntity.class, this.bb);
+        this.bb = new Box(player.getX() - 4, player.getY() - 4, player.getZ() - 4, player.getX() + 4, player.getY() + 4, player.getZ() + 4);
+        List<WolfEntity> stuff = MinecraftClient.getInstance().world.getNonSpectatingEntities(WolfEntity.class, this.bb);
         return stuff;
     }
 
@@ -53,8 +53,8 @@ public class PetOwner
     private List<ParrotEntity> getParrot()
     {
         PlayerEntity player = MinecraftClient.getInstance().player;
-        this.bb = new Box(player.x - 2, player.y - 2, player.z - 2, player.x + 2, player.y + 2, player.z + 2);
-        return MinecraftClient.getInstance().world.getEntities(ParrotEntity.class, this.bb);
+        this.bb = new Box(player.getX() - 4, player.getY() - 4, player.getZ() - 4, player.getX() + 4, player.getY() + 4, player.getZ() + 4);
+        return MinecraftClient.getInstance().world.getNonSpectatingEntities(ParrotEntity.class, this.bb);
     }
 
     public String getParrotOwners()
@@ -85,8 +85,8 @@ public class PetOwner
     private List<CatEntity> getCat()
     {
         PlayerEntity player = MinecraftClient.getInstance().player;
-        this.bb = new Box(player.x - 2, player.y - 2, player.z - 2, player.x + 2, player.y + 2, player.z + 2);
-        return MinecraftClient.getInstance().world.getEntities(CatEntity.class, this.bb);
+        this.bb = new Box(player.getX() - 4, player.getY() - 4, player.getZ() - 4, player.getX() + 4, player.getY() + 4, player.getZ() + 4);
+        return MinecraftClient.getInstance().world.getNonSpectatingEntities(CatEntity.class, this.bb);
     }
 
     public String getCatOwners()
