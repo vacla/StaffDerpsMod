@@ -16,14 +16,14 @@ import fi.dy.masa.malilib.util.FileUtils;
 import fi.dy.masa.malilib.util.JsonUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import fi.dy.masa.malilib.util.WorldUtils;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 public class DataManager
 {
     private static DataManager INSTANCE = new DataManager();
     private static boolean canSave;
 
-    private final CompassMath compassMath = new CompassMath(Minecraft.getInstance());
+    private final CompassMath compassMath = new CompassMath(MinecraftClient.getInstance());
     private final SeeInvisible invis = new SeeInvisible();
     private final PetOwner owner = new PetOwner();
     private final MobSummoner summoner = new MobSummoner();
@@ -130,7 +130,7 @@ public class DataManager
 
     private static String getStorageFileName(boolean globalData)
     {
-        Minecraft mc = Minecraft.getInstance();
+        MinecraftClient mc = MinecraftClient.getInstance();
         String name = StringUtils.getWorldOrServerName();
 
         if(name != null)

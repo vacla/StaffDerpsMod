@@ -7,12 +7,11 @@ import fi.dy.masa.malilib.gui.GuiBase;
 import fi.dy.masa.malilib.hotkeys.IHotkeyCallback;
 import fi.dy.masa.malilib.hotkeys.IKeybind;
 import fi.dy.masa.malilib.hotkeys.KeyAction;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 public class KeyCallbacks
 {
-
-    public static void init(Minecraft mc)
+    public static void init(MinecraftClient mc)
     {	
         IHotkeyCallback callbackHotkeys = new KeyCallbackHotkeys(mc);
 
@@ -24,9 +23,9 @@ public class KeyCallbacks
 
     private static class KeyCallbackHotkeys implements IHotkeyCallback
     {
-        private final Minecraft mc;
+        private final MinecraftClient mc;
 
-        public KeyCallbackHotkeys(Minecraft mc)
+        public KeyCallbackHotkeys(MinecraftClient mc)
         {
             this.mc = mc;
         }
@@ -34,7 +33,7 @@ public class KeyCallbacks
         @Override
         public boolean onKeyAction(KeyAction action, IKeybind key)
         {
-            if(this.mc.player == null || this.mc.world == null || !Minecraft.isGuiEnabled())
+            if(this.mc.player == null || this.mc.world == null || !MinecraftClient.isHudEnabled())
             {
                 return false;
             }
@@ -56,4 +55,3 @@ public class KeyCallbacks
         }
     }
 }
-

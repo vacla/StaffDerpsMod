@@ -2,114 +2,114 @@ package eu.minemania.staffderpsmod.subfunctions;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityParrot;
-import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.entity.passive.CatEntity;
+import net.minecraft.entity.passive.ParrotEntity;
+import net.minecraft.entity.passive.WolfEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Box;
 
-public class PetOwner {
-
-    private AxisAlignedBB bb;
+public class PetOwner
+{
+    private Box bb;
     private String randomOwner;
 
     public PetOwner(){}
 
-    private List<EntityWolf> getDog()
+    private List<WolfEntity> getDog()
     {
-        EntityPlayer player = Minecraft.getInstance().player;
-        this.bb = new AxisAlignedBB(player.posX - 4, player.posY - 4, player.posZ - 4, player.posX + 4, player.posY + 4, player.posZ + 4);
-        List<EntityWolf> stuff = Minecraft.getInstance().world.getEntitiesWithinAABB(EntityWolf.class, this.bb);
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        this.bb = new Box(player.x - 4, player.y - 4, player.z - 4, player.x + 4, player.y + 4, player.z + 4);
+        List<WolfEntity> stuff = MinecraftClient.getInstance().world.getEntities(WolfEntity.class, this.bb);
         return stuff;
     }
 
     public String getDogOwners()
     {
         String result = "";
-        List<EntityWolf> dogs = this.getDog();
+        List<WolfEntity> dogs = this.getDog();
         if (dogs == null)
         {
             return "";
         }
         for (Object dog : dogs)
         {
-            Entity owner = ((EntityWolf)dog).getOwner();
+            Entity owner = ((WolfEntity)dog).getOwner();
             if (owner == null)
             {
                 continue;
             }
-            String name = owner.getName().getUnformattedComponentText();
+            String name = owner.getName().asString();
             if (name != null && name != "")
             {
                 this.randomOwner = name;
             }
-            result += ((EntityWolf)dog).getName().getUnformattedComponentText() + " ";
+            result += ((WolfEntity)dog).getName().asString() + " ";
         }
         return result;
     }
 
-    private List<EntityParrot> getParrot()
+    private List<ParrotEntity> getParrot()
     {
-        EntityPlayer player = Minecraft.getInstance().player;
-        this.bb = new AxisAlignedBB(player.posX - 2, player.posY - 2, player.posZ - 2, player.posX + 2, player.posY + 2, player.posZ + 2);
-        return Minecraft.getInstance().world.getEntitiesWithinAABB(EntityParrot.class, this.bb);
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        this.bb = new Box(player.x - 4, player.y - 4, player.z - 4, player.x + 4, player.y + 4, player.z + 4);
+        return MinecraftClient.getInstance().world.getEntities(ParrotEntity.class, this.bb);
     }
 
     public String getParrotOwners()
     {
         String result = "";
-        List<EntityParrot> parrots = this.getParrot();
+        List<ParrotEntity> parrots = this.getParrot();
         if (parrots == null)
         {
             return "";
         }
         for (Object parrot : parrots)
         {
-            Entity owner = ((EntityParrot)parrot).getOwner();
+            Entity owner = ((ParrotEntity)parrot).getOwner();
             if (owner == null)
             {
                 continue;
             }
-            String name = owner.getName().getUnformattedComponentText();
+            String name = owner.getName().asString();
             if (name != null && name != "")
             {
                 this.randomOwner = name;
             }
-            result += ((EntityOcelot)parrot).getName() + " ";          
+            result += ((ParrotEntity)parrot).getName().asString() + " ";          
         }
         return result;
     }
 
-    private List<EntityOcelot> getCat()
+    private List<CatEntity> getCat()
     {
-        EntityPlayer player = Minecraft.getInstance().player;
-        this.bb = new AxisAlignedBB(player.posX - 2, player.posY - 2, player.posZ - 2, player.posX + 2, player.posY + 2, player.posZ + 2);
-        return Minecraft.getInstance().world.getEntitiesWithinAABB(EntityOcelot.class, this.bb);
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        this.bb = new Box(player.x - 4, player.y - 4, player.z - 4, player.x + 4, player.y + 4, player.z + 4);
+        return MinecraftClient.getInstance().world.getEntities(CatEntity.class, this.bb);
     }
 
     public String getCatOwners()
     {
         String result = "";
-        List<EntityOcelot> cats = this.getCat();
+        List<CatEntity> cats = this.getCat();
         if (cats == null)
         {
             return "";
         }
         for (Object cat : cats)
         {
-            Entity owner = ((EntityOcelot)cat).getOwner();
+            Entity owner = ((CatEntity)cat).getOwner();
             if (owner == null)
             {
                 continue;
             }
-            String name = owner.getName().getUnformattedComponentText();
+            String name = owner.getName().asString();
             if (name != null && name != "")
             {
                 this.randomOwner = name;
             }
-            result += ((EntityOcelot)cat).getName() + " ";			
+            result += ((CatEntity)cat).getName().asString() + " ";			
         }
         return result;
     }

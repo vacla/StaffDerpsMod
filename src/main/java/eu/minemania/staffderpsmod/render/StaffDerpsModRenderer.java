@@ -3,7 +3,7 @@ package eu.minemania.staffderpsmod.render;
 import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.data.DataManager;
 import fi.dy.masa.malilib.render.RenderUtils;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 public class StaffDerpsModRenderer
 {
@@ -16,8 +16,8 @@ public class StaffDerpsModRenderer
 
     public static void renderOverlays()
     {
-        Minecraft mc = Minecraft.getInstance();
-        if(mc.currentScreen == null && Minecraft.isGuiEnabled())
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if(mc.currentScreen == null && MinecraftClient.isHudEnabled())
         {
             StaffDerpsModRenderer.getInstance().displayInvisible();
             StaffDerpsModRenderer.getInstance().displayPetOwner();

@@ -1,32 +1,32 @@
 package eu.minemania.staffderpsmod.subfunctions;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Style;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 
-public class CompassMath {
+public class CompassMath
+{
+    private MinecraftClient minecraft;
 
-    private Minecraft minecraft;
-
-    public CompassMath(Minecraft minecraft) 
+    public CompassMath(MinecraftClient minecraft) 
     {
         this.minecraft = minecraft;
     }
 
     public void passThrough()
     {
-        Vec3d vector = minecraft.player.getLookVec();
-        double prevX = minecraft.player.posX;
-        double prevY = minecraft.player.posY + 1.62;
-        double prevZ = minecraft.player.posZ;
+        Vec3d vector = minecraft.player.getRotationVector();
+        double prevX = minecraft.player.x;
+        double prevY = minecraft.player.y + 1.62;
+        double prevZ = minecraft.player.z;
 
         boolean doesWallExist = false;
         Style style = new Style();
-        TextComponentString message;
+        LiteralText message;
 
         for (int i = 0; i < 512; i++)
         {
@@ -60,26 +60,26 @@ public class CompassMath {
 
         if (doesWallExist)
         {
-            message = new TextComponentString("Too much wall. You shall not pass!");
+            message = new LiteralText("Too much wall. You shall not pass!");
         }
         else
         {
-            message = new TextComponentString("Nothing to pass through!");
+            message = new LiteralText("Nothing to pass through!");
         }
 
-        style.setColor(TextFormatting.DARK_RED);
+        style.setColor(Formatting.DARK_RED);
         message.setStyle(style);
         minecraft.player.sendMessage(message);
     }
 
     public void jumpTo()
     {
-        Vec3d vector = minecraft.player.getLookVec();
-        double prevX = minecraft.player.posX;
-        double prevY = minecraft.player.posY + 1.62;
-        double prevZ = minecraft.player.posZ;
+        Vec3d vector = minecraft.player.getRotationVector();
+        double prevX = minecraft.player.x;
+        double prevY = minecraft.player.y + 1.62;
+        double prevZ = minecraft.player.z;
         Style style = new Style();
-        TextComponentString message;
+        LiteralText message;
 
         for (int i = 0; i < 512; i++)
         {
@@ -91,7 +91,7 @@ public class CompassMath {
             int y = (int) Math.floor(prevY);
             int z = (int) Math.floor(prevZ);
 
-            if (canCollide(x, y, z) && (minecraft.player.getPosition().getX() != x && minecraft.player.getPosition().getZ() != z))
+            if (canCollide(x, y, z) && (minecraft.player.getPos().getX() != x && minecraft.player.getPos().getZ() != z))
             {
                 for (int j = y; j < 256; j++)
                 {
@@ -104,16 +104,16 @@ public class CompassMath {
             }
         }
 
-        message = new TextComponentString("No block in sight (or too far)!");
-        style.setColor(TextFormatting.DARK_RED);
+        message = new LiteralText("No block in sight (or too far)!");
+        style.setColor(Formatting.DARK_RED);
         message.setStyle(style);
         minecraft.player.sendMessage(message);
     }
 
     private boolean canCollide(int x, int y, int z)
     {
-        BlockPos pos = new BlockPos.MutableBlockPos(x, y, z);
-        IBlockState state = minecraft.world.getBlockState(pos);
+        BlockPos pos = new BlockPos.Mutable(x, y, z);
+        BlockState state = minecraft.world.getBlockState(pos);
         if (!state.getCollisionShape(minecraft.world, pos).isEmpty())
         {
             return true;

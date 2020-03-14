@@ -1,19 +1,19 @@
 package eu.minemania.staffderpsmod.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandSource;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.server.command.ServerCommandSource;
 
 public class Command
 {
-    public static CommandDispatcher<CommandSource> commandDispatcher;
+    public static CommandDispatcher<ServerCommandSource> commandDispatcher;
 
-    public static void registerCommands(CommandDispatcher<CommandSource> dispatcher)
+    public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher)
     {
         ClientCommandManager.clearClientSideCommands();
         StaffDerpsCommand.register(dispatcher);
 
-        if (Minecraft.getInstance().isIntegratedServerRunning())
+        if (MinecraftClient.getInstance().isIntegratedServerRunning())
         {
 
         }

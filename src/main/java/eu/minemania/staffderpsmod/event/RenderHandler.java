@@ -3,7 +3,7 @@ package eu.minemania.staffderpsmod.event;
 import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.render.StaffDerpsModRenderer;
 import fi.dy.masa.malilib.interfaces.IRenderer;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 public class RenderHandler implements IRenderer
 {
@@ -17,9 +17,9 @@ public class RenderHandler implements IRenderer
     @Override
     public void onRenderGameOverlayPost(float partialTicks)
     {
-        Minecraft mc = Minecraft.getInstance();
+        MinecraftClient mc = MinecraftClient.getInstance();
 
-        if (Configs.Generic.ENABLED.getBooleanValue() && mc.gameSettings.showDebugInfo == false && mc.player != null)
+        if (Configs.Generic.ENABLED.getBooleanValue() && mc.options.debugEnabled == false && mc.player != null)
         {
             StaffDerpsModRenderer.renderOverlays();
         }
