@@ -53,7 +53,7 @@ public class PetOwner
     private List<EntityParrot> getParrot()
     {
         EntityPlayer player = Minecraft.getInstance().player;
-        this.bb = new AxisAlignedBB(player.posX - 2, player.posY - 2, player.posZ - 2, player.posX + 2, player.posY + 2, player.posZ + 2);
+        this.bb = new AxisAlignedBB(player.posX - 4, player.posY - 4, player.posZ - 4, player.posX + 4, player.posY + 4, player.posZ + 4);
         return Minecraft.getInstance().world.getEntitiesWithinAABB(EntityParrot.class, this.bb);
     }
 
@@ -77,7 +77,7 @@ public class PetOwner
             {
                 this.randomOwner = name;
             }
-            result += ((EntityParrot)parrot).getName() + " ";          
+            result += ((EntityParrot)parrot).getName().getUnformattedComponentText() + " ";          
         }
         return result;
     }
@@ -85,7 +85,7 @@ public class PetOwner
     private List<EntityOcelot> getCat()
     {
         EntityPlayer player = Minecraft.getInstance().player;
-        this.bb = new AxisAlignedBB(player.posX - 2, player.posY - 2, player.posZ - 2, player.posX + 2, player.posY + 2, player.posZ + 2);
+        this.bb = new AxisAlignedBB(player.posX - 4, player.posY - 4, player.posZ - 4, player.posX + 4, player.posY + 4, player.posZ + 4);
         return Minecraft.getInstance().world.getEntitiesWithinAABB(EntityOcelot.class, this.bb);
     }
 
@@ -109,7 +109,7 @@ public class PetOwner
             {
                 this.randomOwner = name;
             }
-            result += ((EntityOcelot)cat).getName() + " ";			
+            result += ((EntityOcelot)cat).getName().getUnformattedComponentText() + " ";			
         }
         return result;
     }
