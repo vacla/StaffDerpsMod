@@ -9,7 +9,7 @@ import fi.dy.masa.malilib.event.InputEventHandler;
 import fi.dy.masa.malilib.event.RenderEventHandler;
 import fi.dy.masa.malilib.interfaces.IInitializationHandler;
 import fi.dy.masa.malilib.interfaces.IRenderer;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 public class InitHandler implements IInitializationHandler 
 {
@@ -25,6 +25,6 @@ public class InitHandler implements IInitializationHandler
         IRenderer renderer = new RenderHandler();
         RenderEventHandler.getInstance().registerGameOverlayRenderer(renderer);
 
-        KeyCallbacks.init(Minecraft.getInstance());
+        KeyCallbacks.init(MinecraftClient.getInstance());
     }
 }

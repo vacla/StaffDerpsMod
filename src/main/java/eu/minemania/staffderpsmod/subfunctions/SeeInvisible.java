@@ -3,33 +3,33 @@ package eu.minemania.staffderpsmod.subfunctions;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.Box;
 
-public class SeeInvisible {
-
-    private AxisAlignedBB bb;
+public class SeeInvisible
+{
+    private Box bb;
 
     public SeeInvisible(){}
 
-    private List<EntityPlayer> getPlayers()
+    private List<PlayerEntity> getPlayers()
     {
-        EntityPlayer player = Minecraft.getInstance().player;
-        this.bb = new AxisAlignedBB(player.posX - 32, player.posY - 32, player.posZ - 32, player.posX + 32, player.posY + 32, player.posZ + 32);
-        return Minecraft.getInstance().world.getEntitiesWithinAABB(EntityPlayer.class, this.bb);
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        this.bb = new Box(player.x - 32, player.y - 32, player.z - 32, player.x + 32, player.y + 32, player.z + 32);
+        return MinecraftClient.getInstance().world.getEntities(PlayerEntity.class, this.bb);
     }
 
-    public List<EntityPlayer> getInvsPlayers()
+    public List<PlayerEntity> getInvsPlayers()
     {
-        List<EntityPlayer> playerList = new ArrayList<EntityPlayer>();
+        List<PlayerEntity> playerList = new ArrayList<PlayerEntity>();
 
         for (Object player: this.getPlayers())
         {
-            if (((EntityPlayer) player).isInvisible())
+            if (((PlayerEntity) player).isInvisible())
             {
-                playerList.add((EntityPlayer) player);
+                playerList.add((PlayerEntity) player);
             }
         }
         return playerList;
@@ -37,8 +37,8 @@ public class SeeInvisible {
 
     public String getInvsString()
     {
-        EntityPlayer player = Minecraft.getInstance().player;
-        List<EntityPlayer> invsPlayers = this.getInvsPlayers();
+        PlayerEntity player = MinecraftClient.getInstance().player;
+        List<PlayerEntity> invsPlayers = this.getInvsPlayers();
         if (invsPlayers.contains(player))
         {
             invsPlayers.remove(player);
@@ -60,7 +60,7 @@ public class SeeInvisible {
                     currentPlayer = (Entity)invsPlayers.get(i);
                 }
             }
-            result += currentPlayer.getName() + "(" + currentDist + "m) ";
+            result += currentPlayer.getName().asString() + "(" + currentDist + "m) ";
             invsPlayers.remove(currentPlayer);
         }
         return result;
@@ -68,6 +68,6 @@ public class SeeInvisible {
 
     private int distanceToMob(Entity e1, Entity e2)
     {
-        return (int) Math.sqrt(Math.pow((e1.posX - e2.posX), 2) + Math.pow((e1.posY - e2.posY), 2) + Math.pow((e1.posZ - e2.posZ), 2));
+        return (int) Math.sqrt(Math.pow((e1.x - e2.x), 2) + Math.pow((e1.y - e2.y), 2) + Math.pow((e1.z - e2.z), 2));
     }
 }

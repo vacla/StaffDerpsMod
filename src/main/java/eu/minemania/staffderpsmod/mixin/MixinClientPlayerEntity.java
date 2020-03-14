@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.brigadier.StringReader;
 import eu.minemania.staffderpsmod.command.ClientCommandManager;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.network.ClientPlayerEntity;
 
-@Mixin(EntityPlayerSP.class)
-public class MixinEntityPlayerSP
+@Mixin(ClientPlayerEntity.class)
+public class MixinClientPlayerEntity
 {
     @Inject(method = "sendChatMessage(Ljava/lang/String;)V", at = @At("HEAD"), cancellable = true)
     private void onSendChatMessageSDP(String message, CallbackInfo ci)

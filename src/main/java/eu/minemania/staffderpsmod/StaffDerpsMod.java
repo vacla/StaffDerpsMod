@@ -2,18 +2,19 @@ package eu.minemania.staffderpsmod;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dimdev.riftloader.listener.InitializationListener;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 import fi.dy.masa.malilib.MaLiLibReference;
 import fi.dy.masa.malilib.event.InitializationHandler;
+import fi.dy.masa.malilib.util.StringUtils;
+import net.fabricmc.api.ModInitializer;
 
-public class StaffDerpsMod implements InitializationListener
+public class StaffDerpsMod implements ModInitializer
 {
     public static final Logger logger = LogManager.getLogger(Reference.MOD_ID);
 
     @Override
-    public void onInitialization()
+    public void onInitialize()
     {
 
         MixinBootstrap.init();
@@ -30,7 +31,7 @@ public class StaffDerpsMod implements InitializationListener
         }
         catch (LinkageError e)
         {
-            throw new IllegalStateException("Incompatible Malilib version (" + MaLiLibReference.MOD_ID + ")" , e);
+            throw new IllegalStateException("Incompatible Malilib version (" + StringUtils.getModVersionString(MaLiLibReference.MOD_ID) + ")" , e);
         }
     }
 

@@ -1,4 +1,5 @@
 .eclipse-pmd
+.gradle/
 .settings/
 bin/
 build/

@@ -1,0 +1,43 @@
+{
+    "schemaVersion": 1,
+    "id": "staffderpsmod",
+    "name": "StaffDerpsMod",
+    "version": "${mod_version}",
+
+    "description": "Updated StaffDerpsMod.",
+    "authors": [
+        "Arnevdl29",
+        "Kyzderp"
+    ],
+    "contact": {
+        "homepage": "",
+        "issues": "https://github.com/vacla/StaffDerpsMod/issues",
+        "sources": "https://github.com/vacla/StaffDerpsMod",
+        "twitter": "https://twitter.com/ArneLangenbergh",
+        "discord": "https://discord.gg/VTHVVgt"
+    },
+
+    "license": "MIT",
+
+    "environment": "client",
+    "entrypoints": {
+        "main": [
+            "eu.minemania.staffderpsmod.StaffDerpsMod"
+        ],
+        "modmenu": [
+            "eu.minemania.staffderpsmod.compat.modmenu.ModMenuImpl"
+        ]
+    },
+
+    "mixins": [
+        "mixins.staffderpsmod.json"
+    ],
+
+    "depends": {
+        "malilib": "0.10.0-dev.20+arne.2"
+    },
+
+    "custom": {
+        "modmenu:clientsideOnly": true
+    }
+}

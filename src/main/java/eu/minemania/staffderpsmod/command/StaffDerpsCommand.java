@@ -7,13 +7,12 @@ import com.mojang.brigadier.tree.CommandNode;
 import eu.minemania.staffderpsmod.Reference;
 import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.data.DataManager;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.CommandSource;
-import net.minecraft.command.arguments.EntitySummonArgument;
-import net.minecraft.command.arguments.SuggestionProviders;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.suggestion.SuggestionProviders;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import java.util.Map;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
@@ -21,18 +20,19 @@ import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.BoolArgumentType.bool;
 import static com.mojang.brigadier.arguments.BoolArgumentType.getBool;
-import static net.minecraft.command.Commands.argument;
-import static net.minecraft.command.Commands.literal;
-import static net.minecraft.command.arguments.BlockPosArgument.blockPos;
-import static net.minecraft.command.arguments.BlockPosArgument.getBlockPos;
+import static net.minecraft.server.command.CommandManager.argument;
+import static net.minecraft.server.command.CommandManager.literal;
+import static net.minecraft.command.arguments.BlockPosArgumentType.blockPos;
+import static net.minecraft.command.arguments.BlockPosArgumentType.getBlockPos;
+import static net.minecraft.command.arguments.EntitySummonArgumentType.entitySummon;
+import static net.minecraft.command.arguments.EntitySummonArgumentType.getEntitySummon;
 
 public class StaffDerpsCommand extends StaffDerpsCommandBase
 {
-
-    public static void register(CommandDispatcher<CommandSource> dispatcher)
+    public static void register(CommandDispatcher<ServerCommandSource> dispatcher)
     {
         ClientCommandManager.addClientSideCommand("staffderps");
-        LiteralArgumentBuilder<CommandSource> staffderps = literal("staffderps").executes(StaffDerpsCommand::info)
+        LiteralArgumentBuilder<ServerCommandSource> staffderps = literal("staffderps").executes(StaffDerpsCommand::info)
                 .then(literal("help").executes(StaffDerpsCommand::help))
                 .then(literal("invis").executes(StaffDerpsCommand::invis)
                         .then(argument("on", bool()).executes(StaffDerpsCommand::invis)))
@@ -49,20 +49,20 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                         .then(argument("pos", blockPos()).executes(StaffDerpsCommand::tp)))
                 .then(literal("summon").executes(StaffDerpsCommand::summon)
                         .then(argument("pos", blockPos())
-                                .then(argument("entity", EntitySummonArgument.entitySummon()).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(StaffDerpsCommand::summon))))
+                                .then(argument("entity", entitySummon()).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(StaffDerpsCommand::summon))))
                 .then(literal("scalar").executes(StaffDerpsCommand::scalar)
                         .then(argument("scalar", doubleArg(0,9)).executes(StaffDerpsCommand::scalar)));
         dispatcher.register(staffderps);
     }
 
-    private static int info(CommandContext<CommandSource> context)
+    private static int info(CommandContext<ServerCommandSource> context)
     {
         localOutput(context.getSource(), Reference.MOD_NAME + " ["+ Reference.MOD_VERSION+"]");
         localOutput(context.getSource(), "Type /staffderps help for commands.");
         return 1;
     }
 
-    private static int invis(CommandContext<CommandSource> context)
+    private static int invis(CommandContext<ServerCommandSource> context)
     {
         boolean on;
         try
@@ -78,7 +78,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         return 1;
     }
 
-    private static int pet(CommandContext<CommandSource> context)
+    private static int pet(CommandContext<ServerCommandSource> context)
     {
         boolean on;
         try
@@ -101,7 +101,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         return 1;
     }
 
-    private static int petCopy(CommandContext<CommandSource> context)
+    private static int petCopy(CommandContext<ServerCommandSource> context)
     {
         String owner = DataManager.getOwner().getRandomOwner();
         if(owner == null || owner == "")
@@ -115,7 +115,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         return 1;
     }
 
-    private static int chunk(CommandContext<CommandSource> context)
+    private static int chunk(CommandContext<ServerCommandSource> context)
     {
         int first = 10000000;
         int second = 10000000;
@@ -132,7 +132,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                     {
                         second = Integer.parseInt(splitmessage[i]) * 16 + 8;
                         first = first * 16 + 8;
-                        Minecraft.getInstance().player.sendChatMessage("/tppos " + first + " 100 " + second);
+                        MinecraftClient.getInstance().player.sendChatMessage("/tppos " + first + " 100 " + second);
                     }
                     else
                     {
@@ -148,14 +148,14 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         return 1;
     }
 
-    private static int tp(CommandContext<CommandSource> context)
+    private static int tp(CommandContext<ServerCommandSource> context)
     {
         BlockPos blockPos;
         try
         {
             blockPos = getBlockPos(context, "pos");
             localOutput(context.getSource(), "Running /tppos " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
-            Minecraft.getInstance().player.sendChatMessage("/tppos " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
+            MinecraftClient.getInstance().player.sendChatMessage("/tppos " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
         }
         catch (Exception e)
         {
@@ -164,20 +164,17 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         return 1;
     }
 
-    private static int summon(CommandContext<CommandSource> context)
+    private static int summon(CommandContext<ServerCommandSource> context)
     {
         BlockPos blockPos;
-        ResourceLocation entity;
+        Identifier entity;
         try
         {
             blockPos = getBlockPos(context, "pos");
-            System.out.println(blockPos);
-            entity = EntitySummonArgument.getEntityId(context, "entity");
-            System.out.println(entity);
+            entity = getEntitySummon(context, "entity");
             if(entity != null)
             {
                 String command = "/summon " + entity.toString() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ() + " {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}";
-                System.out.println(command);
                 Configs.Generic.SUMMON_COMMAND.setValueFromString(command);
                 localOutput(context.getSource(), "Summon command set: " + command);
             }
@@ -189,7 +186,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         return 1;
     }
 
-    private static int scalar(CommandContext<CommandSource> context)
+    private static int scalar(CommandContext<ServerCommandSource> context)
     {
         double scalar;
         try
@@ -205,25 +202,25 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         return 1;
     }
 
-    private static int help(CommandContext<CommandSource> context)
+    private static int help(CommandContext<ServerCommandSource> context)
     {
         localOutput(context.getSource(), Reference.MOD_NAME + " ["+ Reference.MOD_VERSION+"] commands");
         int cmdCount = 0;
-        CommandDispatcher<CommandSource> dispatcher = Command.commandDispatcher;
-        for(CommandNode<CommandSource> command : dispatcher.getRoot().getChildren())
+        CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
+        for(CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
         {
             String cmdName = command.getName();
             if(ClientCommandManager.isClientSideCommand(cmdName))
             {
-                Map<CommandNode<CommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
+                Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
                 for(String u : usage.values())
                 {
-                    ClientCommandManager.sendFeedback(new TextComponentString("/" + cmdName + " " + u));
+                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
                 if(usage.size() == 0)
                 {
-                    ClientCommandManager.sendFeedback(new TextComponentString("/" + cmdName));
+                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
                     cmdCount++;
                 }
             }
