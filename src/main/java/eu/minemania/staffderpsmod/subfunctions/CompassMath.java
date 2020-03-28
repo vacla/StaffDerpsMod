@@ -1,5 +1,6 @@
 package eu.minemania.staffderpsmod.subfunctions;
 
+import eu.minemania.staffderpsmod.config.Configs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.BlockPos;
@@ -47,12 +48,12 @@ public class CompassMath
             {
                 if (!canCollide(x, y + 1, z) && !canCollide(x, y, z))
                 {
-                    minecraft.player.sendChatMessage("/tppos " + x + " " + y + " " + z);
+                    minecraft.player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + y + " " + z);
                     return;
                 }
                 else if (!canCollide(x, y, z) && !canCollide(x, y - 1, z))
                 {
-                    minecraft.player.sendChatMessage("/tppos " + x + " " + (y - 1) + " " + z);
+                    minecraft.player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (y - 1) + " " + z);
                     return;
                 }
             }
@@ -97,7 +98,7 @@ public class CompassMath
                 {
                     if (!canCollide(x, j + 1, z) && !canCollide(x, j + 2, z))
                     {
-                        minecraft.player.sendChatMessage("/tppos " + x + " " + (j + 1) + " " + z);
+                        minecraft.player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (j + 1) + " " + z);
                         return;
                     }
                 }

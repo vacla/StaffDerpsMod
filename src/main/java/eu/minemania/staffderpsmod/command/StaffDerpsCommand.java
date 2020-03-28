@@ -131,7 +131,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                     {
                         second = Integer.parseInt(splitmessage[i]) * 16 + 8;
                         first = first * 16 + 8;
-                        Minecraft.getInstance().player.sendChatMessage("/tppos " + first + " 100 " + second);
+                        Minecraft.getInstance().player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + first + " 100 " + second);
                     }
                     else
                     {
@@ -153,8 +153,8 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         try
         {
             blockPos = getBlockPos(context, "pos");
-            localOutput(context.getSource(), "Running /tppos " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
-            Minecraft.getInstance().player.sendChatMessage("/tppos " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
+            localOutput(context.getSource(), "Running " + Configs.Generic.TP_COMMAND.getStringValue() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
+            Minecraft.getInstance().player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
         }
         catch (Exception e)
         {
