@@ -3,6 +3,7 @@ package eu.minemania.staffderpsmod.render;
 import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.data.DataManager;
 import fi.dy.masa.malilib.render.RenderUtils;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 
 public class StaffDerpsModRenderer
@@ -31,7 +32,7 @@ public class StaffDerpsModRenderer
     {
         if(Configs.Generic.SEE_INVISIBLE.getBooleanValue())
         {
-        RenderUtils.renderText(0, 0, 0xFFAA00, "Hidden players: " + DataManager.getInvis().getInvsString());
+        RenderUtils.renderText(0, 0, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.hidden", DataManager.getInvis().getInvsString()));
         }
     }
 
@@ -45,9 +46,9 @@ public class StaffDerpsModRenderer
             String dogs = DataManager.getOwner().getDogOwners();
             String cats = DataManager.getOwner().getCatOwners();
             String parrots = DataManager.getOwner().getParrotOwners();
-            RenderUtils.renderText(0, 0, 0xFFAA00, "Dogs: " + dogs);
-            RenderUtils.renderText(0, 10, 0xFFAA00, "Cats: " + cats);
-            RenderUtils.renderText(0, 20, 0xFFAA00, "Parrots: " + parrots);
+            RenderUtils.renderText(0, 0, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.dog", dogs));
+            RenderUtils.renderText(0, 10, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.cat", cats));
+            RenderUtils.renderText(0, 20, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.parrot", parrots));
         }
     }
 }

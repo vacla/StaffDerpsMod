@@ -3,8 +3,8 @@ package eu.minemania.staffderpsmod.subfunctions;
 import eu.minemania.staffderpsmod.config.Configs;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -27,7 +27,7 @@ public class CompassMath
 
         boolean doesWallExist = false;
         Style style = new Style();
-        LiteralText message;
+        TranslatableText message;
 
         for (int i = 0; i < 512; i++)
         {
@@ -61,11 +61,11 @@ public class CompassMath
 
         if (doesWallExist)
         {
-            message = new LiteralText("Too much wall. You shall not pass!");
+            message = new TranslatableText("staffderpsmod.message.compassMath.much_wall");
         }
         else
         {
-            message = new LiteralText("Nothing to pass through!");
+            message = new TranslatableText("staffderpsmod.message.compassMath.nothing_pass");
         }
 
         style.setColor(Formatting.DARK_RED);
@@ -80,7 +80,7 @@ public class CompassMath
         double prevY = minecraft.player.getY() + 1.62;
         double prevZ = minecraft.player.getZ();
         Style style = new Style();
-        LiteralText message;
+        TranslatableText message;
 
         for (int i = 0; i < 512; i++)
         {
@@ -105,7 +105,7 @@ public class CompassMath
             }
         }
 
-        message = new LiteralText("No block in sight (or too far)!");
+        message = new TranslatableText("staffderpsmod.message.compassMath.no_block");
         style.setColor(Formatting.DARK_RED);
         message.setStyle(style);
         minecraft.player.sendMessage(message);

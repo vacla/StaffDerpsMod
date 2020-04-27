@@ -7,6 +7,7 @@ import com.mojang.brigadier.tree.CommandNode;
 import eu.minemania.staffderpsmod.Reference;
 import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.data.DataManager;
+import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.server.command.ServerCommandSource;
@@ -58,7 +59,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
     private static int info(CommandContext<ServerCommandSource> context)
     {
         localOutput(context.getSource(), Reference.MOD_NAME + " ["+ Reference.MOD_VERSION+"]");
-        localOutput(context.getSource(), "Type /staffderps help for commands.");
+        localOutputT(context.getSource(), "staffderpsmod.message.command.info");
         return 1;
     }
 
@@ -69,7 +70,8 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         {
             on = getBool(context, "on");
             Configs.Generic.SEE_INVISIBLE.setBooleanValue(on);
-            localOutput(context.getSource(), "See through invisibility: "+ String.valueOf(on).toUpperCase());
+            String strSetting = on ? "staffderpsmod.message.setting.on" : "staffderpsmod.message.setting.off";
+            localOutputT(context.getSource(), "staffderpsmod.message.command.invis", StringUtils.translate(strSetting));
         }
         catch (Exception e)
         {
@@ -87,11 +89,11 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
             Configs.Generic.SEE_PET_OWNER.setBooleanValue(on);
             if(on)
             {
-                localOutput(context.getSource(), "Displaying pets in 2 block radius");
+                localOutputT(context.getSource(), "staffderpsmod.message.command.pet.on");
             }
             else
             {
-                localOutput(context.getSource(), "Pet display OFF");
+                localOutputT(context.getSource(), "staffderpsmod.message.command.pet.off");
             }
         }
         catch (Exception e)
@@ -106,11 +108,11 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         String owner = DataManager.getOwner().getRandomOwner();
         if(owner == null || owner == "")
         {
-            localError(context.getSource(), "No owners for any pets in range!");
+            localErrorT(context.getSource(), "staffderpsmod.message.command.petCopy.error");
         }
         else
         {
-            localOutput(context.getSource(), "Owner name is "+ owner);
+            localOutputT(context.getSource(), "staffderpsmod.message.command.petCopy", owner);
         }
         return 1;
     }
@@ -154,7 +156,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         try
         {
             blockPos = getBlockPos(context, "pos");
-            localOutput(context.getSource(), "Running " + Configs.Generic.TP_COMMAND.getStringValue() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
+            localOutputT(context.getSource(), "staffderpsmod.message.command.tp", Configs.Generic.TP_COMMAND.getStringValue(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
             MinecraftClient.getInstance().player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
         }
         catch (Exception e)
@@ -176,12 +178,12 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
             {
                 String command = "/summon " + entity.toString() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ() + " {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}";
                 Configs.Generic.SUMMON_COMMAND.setValueFromString(command);
-                localOutput(context.getSource(), "Summon command set: " + command);
+                localOutputT(context.getSource(), "staffderpsmod.message.command.summon", command);
             }
         }
         catch (Exception e)
         {
-            localError(context.getSource(), "Summon format incorrect! Needs summon x y z entity");
+            localErrorT(context.getSource(), "staffderpsmod.message.command.summon.error");
         }
         return 1;
     }
@@ -193,18 +195,18 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         {
             scalar = getDouble(context, "scalar");
             Configs.Generic.SCALAR.setDoubleValue(scalar);
-            localOutput(context.getSource(), "Summon vector scalar set to " + scalar);
+            localOutputT(context.getSource(), "staffderpsmod.message.command.scalar", scalar);
         }
         catch (Exception e)
         {
-            localOutput(context.getSource(), "Current summon vector scalar is " + Configs.Generic.SCALAR.getDoubleValue());
+            localOutputT(context.getSource(), "staffderpsmod.message.command.scalar.error", Configs.Generic.SCALAR.getDoubleValue());
         }
         return 1;
     }
 
     private static int help(CommandContext<ServerCommandSource> context)
     {
-        localOutput(context.getSource(), Reference.MOD_NAME + " ["+ Reference.MOD_VERSION+"] commands");
+        localOutputT(context.getSource(), "staffderpsmod.message.command.help", Reference.MOD_NAME, Reference.MOD_VERSION);
         int cmdCount = 0;
         CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
         for(CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
