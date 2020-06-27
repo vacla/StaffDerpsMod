@@ -2,8 +2,6 @@ package eu.minemania.staffderpsmod;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.Mixins;
 import fi.dy.masa.malilib.MaLiLibReference;
 import fi.dy.masa.malilib.event.InitializationHandler;
 import fi.dy.masa.malilib.util.StringUtils;
@@ -16,10 +14,6 @@ public class StaffDerpsMod implements ModInitializer
     @Override
     public void onInitialize()
     {
-
-        MixinBootstrap.init();
-        Mixins.addConfiguration("mixins.staffderpsmod.json");
-
         try
         {
             Class.forName("fi.dy.masa.malilib.event.InitializationHandler");
