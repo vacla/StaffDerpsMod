@@ -15,7 +15,9 @@ public class PetOwner
     private Box bb;
     private String randomOwner;
 
-    public PetOwner(){}
+    public PetOwner()
+    {
+    }
 
     private List<WolfEntity> getDog()
     {
@@ -35,7 +37,7 @@ public class PetOwner
         }
         for (Object dog : dogs)
         {
-            Entity owner = ((WolfEntity)dog).getOwner();
+            Entity owner = ((WolfEntity) dog).getOwner();
             if (owner == null)
             {
                 continue;
@@ -45,7 +47,7 @@ public class PetOwner
             {
                 this.randomOwner = name;
             }
-            result += ((WolfEntity)dog).getName().asString() + " ";
+            result += ((WolfEntity) dog).getName().asString() + " ";
         }
         return result;
     }
@@ -67,7 +69,7 @@ public class PetOwner
         }
         for (Object parrot : parrots)
         {
-            Entity owner = ((ParrotEntity)parrot).getOwner();
+            Entity owner = ((ParrotEntity) parrot).getOwner();
             if (owner == null)
             {
                 continue;
@@ -77,7 +79,7 @@ public class PetOwner
             {
                 this.randomOwner = name;
             }
-            result += ((ParrotEntity)parrot).getName().asString() + " ";          
+            result += ((ParrotEntity) parrot).getName().asString() + " ";
         }
         return result;
     }
@@ -99,7 +101,7 @@ public class PetOwner
         }
         for (Object cat : cats)
         {
-            Entity owner = ((CatEntity)cat).getOwner();
+            Entity owner = ((CatEntity) cat).getOwner();
             if (owner == null)
             {
                 continue;
@@ -109,7 +111,7 @@ public class PetOwner
             {
                 this.randomOwner = name;
             }
-            result += ((CatEntity)cat).getName().asString() + " ";			
+            result += ((CatEntity) cat).getName().asString() + " ";
         }
         return result;
     }

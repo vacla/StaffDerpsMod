@@ -3,7 +3,6 @@ package eu.minemania.staffderpsmod.subfunctions;
 import eu.minemania.staffderpsmod.config.Configs;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Style;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +12,7 @@ public class CompassMath
 {
     private MinecraftClient minecraft;
 
-    public CompassMath(MinecraftClient minecraft) 
+    public CompassMath(MinecraftClient minecraft)
     {
         this.minecraft = minecraft;
     }
@@ -26,14 +25,13 @@ public class CompassMath
         double prevZ = minecraft.player.getZ();
 
         boolean doesWallExist = false;
-        Style style = new Style();
         TranslatableText message;
 
         for (int i = 0; i < 512; i++)
         {
-            prevX += vector.x/8;
-            prevY += vector.y/8;
-            prevZ += vector.z/8;
+            prevX += vector.x / 8;
+            prevY += vector.y / 8;
+            prevZ += vector.z / 8;
 
             int x = (int) Math.floor(prevX);
             int y = (int) Math.floor(prevY);
@@ -68,9 +66,8 @@ public class CompassMath
             message = new TranslatableText("staffderpsmod.message.compassMath.nothing_pass");
         }
 
-        style.setColor(Formatting.DARK_RED);
-        message.setStyle(style);
-        minecraft.player.sendMessage(message);
+        message.getStyle().withColor(Formatting.DARK_RED);
+        minecraft.player.sendMessage(message, false);
     }
 
     public void jumpTo()
@@ -79,14 +76,13 @@ public class CompassMath
         double prevX = minecraft.player.getX();
         double prevY = minecraft.player.getY() + 1.62;
         double prevZ = minecraft.player.getZ();
-        Style style = new Style();
         TranslatableText message;
 
         for (int i = 0; i < 512; i++)
         {
-            prevX += vector.x/8;
-            prevY += vector.y/8;
-            prevZ += vector.z/8;
+            prevX += vector.x / 8;
+            prevY += vector.y / 8;
+            prevZ += vector.z / 8;
 
             int x = (int) Math.floor(prevX);
             int y = (int) Math.floor(prevY);
@@ -106,9 +102,8 @@ public class CompassMath
         }
 
         message = new TranslatableText("staffderpsmod.message.compassMath.no_block");
-        style.setColor(Formatting.DARK_RED);
-        message.setStyle(style);
-        minecraft.player.sendMessage(message);
+        message.getStyle().withColor(Formatting.DARK_RED);
+        minecraft.player.sendMessage(message, false);
     }
 
     private boolean canCollide(int x, int y, int z)

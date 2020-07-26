@@ -71,7 +71,7 @@ public class DataManager
 
         JsonElement element = JsonUtils.parseJsonFile(file);
 
-        if(element != null && element.isJsonObject())
+        if (element != null && element.isJsonObject())
         {
 
             JsonObject root = element.getAsJsonObject();
@@ -82,7 +82,9 @@ public class DataManager
                 {
                     configGuiTab = ConfigGuiTab.valueOf(root.get("config_gui_tab").getAsString());
                 }
-                catch (Exception e) {}
+                catch (Exception e)
+                {
+                }
 
                 if (configGuiTab == null)
                 {
@@ -101,7 +103,7 @@ public class DataManager
 
     public static void save(boolean forceSave)
     {
-        if(canSave == false && forceSave == false)
+        if (canSave == false && forceSave == false)
         {
             return;
         }
@@ -120,7 +122,7 @@ public class DataManager
     {
         File dir = getCurrentConfigDirectory();
 
-        if(dir.exists() == false && dir.mkdirs() == false)
+        if (dir.exists() == false && dir.mkdirs() == false)
         {
             StaffDerpsMod.logger.warn("Failed to create the config directory '{}'", dir.getAbsolutePath());
         }
@@ -133,9 +135,9 @@ public class DataManager
         MinecraftClient mc = MinecraftClient.getInstance();
         String name = StringUtils.getWorldOrServerName();
 
-        if(name != null)
+        if (name != null)
         {
-            if(globalData)
+            if (globalData)
             {
                 return Reference.MOD_ID + "_" + name + ".json";
             }

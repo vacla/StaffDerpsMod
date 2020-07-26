@@ -14,7 +14,9 @@ import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+
 import java.util.Map;
+
 import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
 import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
@@ -52,13 +54,13 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                         .then(argument("pos", blockPos())
                                 .then(argument("entity", entitySummon()).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(StaffDerpsCommand::summon))))
                 .then(literal("scalar").executes(StaffDerpsCommand::scalar)
-                        .then(argument("scalar", doubleArg(0,9)).executes(StaffDerpsCommand::scalar)));
+                        .then(argument("scalar", doubleArg(0, 9)).executes(StaffDerpsCommand::scalar)));
         dispatcher.register(staffderps);
     }
 
     private static int info(CommandContext<ServerCommandSource> context)
     {
-        localOutput(context.getSource(), Reference.MOD_NAME + " ["+ Reference.MOD_VERSION+"]");
+        localOutput(context.getSource(), Reference.MOD_NAME + " [" + Reference.MOD_VERSION + "]");
         localOutputT(context.getSource(), "staffderpsmod.message.command.info");
         return 1;
     }
@@ -87,7 +89,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         {
             on = getBool(context, "on");
             Configs.Generic.SEE_PET_OWNER.setBooleanValue(on);
-            if(on)
+            if (on)
             {
                 localOutputT(context.getSource(), "staffderpsmod.message.command.pet.on");
             }
@@ -106,7 +108,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
     private static int petCopy(CommandContext<ServerCommandSource> context)
     {
         String owner = DataManager.getOwner().getRandomOwner();
-        if(owner == null || owner == "")
+        if (owner == null || owner == "")
         {
             localErrorT(context.getSource(), "staffderpsmod.message.command.petCopy.error");
         }
@@ -126,11 +128,11 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         {
             chunkmessage = getString(context, "<x> <z>");
             String[] splitmessage = chunkmessage.split(" ");
-            for(int i = 0; i < splitmessage.length; i++)
+            for (int i = 0; i < splitmessage.length; i++)
             {
-                if(splitmessage[i].matches("-?[0-9]*"))
+                if (splitmessage[i].matches("-?[0-9]*"))
                 {
-                    if(first != 10000000)
+                    if (first != 10000000)
                     {
                         second = Integer.parseInt(splitmessage[i]) * 16 + 8;
                         first = first * 16 + 8;
@@ -174,7 +176,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         {
             blockPos = getBlockPos(context, "pos");
             entity = getEntitySummon(context, "entity");
-            if(entity != null)
+            if (entity != null)
             {
                 String command = "/summon " + entity.toString() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ() + " {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}";
                 Configs.Generic.SUMMON_COMMAND.setValueFromString(command);
@@ -209,18 +211,18 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         localOutputT(context.getSource(), "staffderpsmod.message.command.help", Reference.MOD_NAME, Reference.MOD_VERSION);
         int cmdCount = 0;
         CommandDispatcher<ServerCommandSource> dispatcher = Command.commandDispatcher;
-        for(CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
+        for (CommandNode<ServerCommandSource> command : dispatcher.getRoot().getChildren())
         {
             String cmdName = command.getName();
-            if(ClientCommandManager.isClientSideCommand(cmdName))
+            if (ClientCommandManager.isClientSideCommand(cmdName))
             {
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
-                for(String u : usage.values())
+                for (String u : usage.values())
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
-                if(usage.size() == 0)
+                if (usage.size() == 0)
                 {
                     ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
                     cmdCount++;

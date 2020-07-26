@@ -1,5 +1,6 @@
 package eu.minemania.staffderpsmod.mixin;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -19,9 +20,10 @@ import net.minecraft.server.command.CommandSource;
 @Mixin(CommandSuggestor.class)
 public class MixinCommandSuggestor
 {
+    @Final
     @Shadow
-    protected TextFieldWidget textField;
-    @Shadow 
+    private TextFieldWidget textField;
+    @Shadow
     private ParseResults<CommandSource> parse;
 
     @Unique
@@ -45,13 +47,13 @@ public class MixinCommandSuggestor
             isClientCommand = ClientCommandManager.isClientSideCommand(command);
         }
 
-        if(isClientCommand && !wasClientCommand)
+        if (isClientCommand && !wasClientCommand)
         {
             wasClientCommand = true;
             oldMaxLength = ((ITextFieldWidget) textField).clientcommands_getMaxLengthSDM();
             textField.setMaxLength(Math.max(oldMaxLength, 32500));
         }
-        else if(!isClientCommand && wasClientCommand)
+        else if (!isClientCommand && wasClientCommand)
         {
             wasClientCommand = false;
             textField.setMaxLength(oldMaxLength);

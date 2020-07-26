@@ -2,6 +2,7 @@ package eu.minemania.staffderpsmod.gui;
 
 import java.util.Collections;
 import java.util.List;
+
 import eu.minemania.staffderpsmod.Reference;
 import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.config.Hotkeys;
@@ -47,7 +48,7 @@ public class GuiConfigs extends GuiConfigsBase
     {
         ConfigGuiTab tab = DataManager.getConfigGuiTab();
 
-        if(tab == ConfigGuiTab.GENERIC)
+        if (tab == ConfigGuiTab.GENERIC)
         {
             return 140;
         }
@@ -67,11 +68,11 @@ public class GuiConfigs extends GuiConfigsBase
         List<? extends IConfigBase> configs;
         ConfigGuiTab tab = DataManager.getConfigGuiTab();
 
-        if(tab == ConfigGuiTab.GENERIC)
+        if (tab == ConfigGuiTab.GENERIC)
         {
             configs = Configs.Generic.OPTIONS;
         }
-        else if(tab == ConfigGuiTab.HOTKEYS)
+        else if (tab == ConfigGuiTab.HOTKEYS)
         {
             configs = Hotkeys.HOTKEY_LIST;
         }
@@ -113,8 +114,8 @@ public class GuiConfigs extends GuiConfigsBase
 
     public enum ConfigGuiTab
     {
-        GENERIC ("staffderpsmod.gui.button.config_gui.generic"),
-        HOTKEYS ("staffderpsmod.gui.button.config_gui.hotkeys");
+        GENERIC("staffderpsmod.gui.button.config_gui.generic"),
+        HOTKEYS("staffderpsmod.gui.button.config_gui.hotkeys");
 
         private final String translationKey;
 

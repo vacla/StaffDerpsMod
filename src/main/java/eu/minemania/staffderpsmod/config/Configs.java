@@ -42,7 +42,7 @@ public class Configs implements IConfigHandler
                 SCALAR,
                 SUMMON_COMMAND,
                 TP_COMMAND
-                );
+        );
     }
 
     /**
@@ -52,11 +52,11 @@ public class Configs implements IConfigHandler
     {
         File configFile = new File(FileUtils.getConfigDirectory(), CONFIG_FILE_NAME);
 
-        if(configFile.exists() && configFile.isFile() && configFile.canRead())
+        if (configFile.exists() && configFile.isFile() && configFile.canRead())
         {
             JsonElement element = JsonUtils.parseJsonFile(configFile);
 
-            if(element != null && element.isJsonObject())
+            if (element != null && element.isJsonObject())
             {
                 JsonObject root = element.getAsJsonObject();
 
@@ -73,7 +73,7 @@ public class Configs implements IConfigHandler
     {
         File dir = FileUtils.getConfigDirectory();
 
-        if((dir.exists() && dir.isDirectory()) || dir.mkdirs())
+        if ((dir.exists() && dir.isDirectory()) || dir.mkdirs())
         {
             JsonObject root = new JsonObject();
 

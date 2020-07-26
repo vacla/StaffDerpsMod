@@ -1,11 +1,12 @@
 package eu.minemania.staffderpsmod.subfunctions;
 
 import java.text.DecimalFormat;
+
 import eu.minemania.staffderpsmod.config.Configs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 
-public class MobSummoner 
+public class MobSummoner
 {
     private String command;
     private DecimalFormat df;

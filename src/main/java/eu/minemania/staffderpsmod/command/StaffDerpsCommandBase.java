@@ -2,7 +2,7 @@ package eu.minemania.staffderpsmod.command;
 
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
@@ -30,14 +30,14 @@ public class StaffDerpsCommandBase
 
     public static void sendColoredText(ServerCommandSource sender, Formatting color, String message)
     {
-        Text chat = new LiteralText(message);
+        LiteralText chat = new LiteralText(message);
         chat.formatted(color);
-        sender.getEntity().sendMessage(chat);
+        sender.getEntity().sendSystemMessage(chat, sender.getEntity().getUuid());
     }
 
-    public static void sendColoredText(ServerCommandSource sender, Formatting color, Text component)
+    public static void sendColoredText(ServerCommandSource sender, Formatting color, MutableText component)
     {
         component.formatted(color);
-        sender.getEntity().sendMessage(component);
+        sender.getEntity().sendSystemMessage(component, sender.getEntity().getUuid());
     }
 }

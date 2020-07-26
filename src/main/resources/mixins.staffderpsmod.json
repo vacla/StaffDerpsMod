@@ -1,14 +1,14 @@
 {
-    "required": true,
-    "package": "eu.minemania.staffderpsmod.mixin",
-    "minVersion": "0.7",
-    "client": [
-        "MixinClientPlayerEntity",
-        "MixinClientPlayNetworkHandler",
-        "MixinCommandSuggestor",
-        "MixinTextFieldWidget"
-    ],
-    "injectors": {
-    	"defaultRequire": 1
-    }
+  "required": true,
+  "package": "eu.minemania.staffderpsmod.mixin",
+  "minVersion": "0.7",
+  "client": [
+    "MixinClientPlayerEntity",
+    "MixinClientPlayNetworkHandler",
+    "MixinCommandSuggestor",
+    "MixinTextFieldWidget"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

@@ -5,6 +5,7 @@ import eu.minemania.staffderpsmod.data.DataManager;
 import fi.dy.masa.malilib.render.RenderUtils;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class StaffDerpsModRenderer
 {
@@ -15,40 +16,40 @@ public class StaffDerpsModRenderer
         return INSTANCE;
     }
 
-    public static void renderOverlays()
+    public static void renderOverlays(MatrixStack matrixStack)
     {
         MinecraftClient mc = MinecraftClient.getInstance();
-        if(mc.currentScreen == null && MinecraftClient.isHudEnabled())
+        if (mc.currentScreen == null && MinecraftClient.isHudEnabled())
         {
-            StaffDerpsModRenderer.getInstance().displayInvisible();
-            StaffDerpsModRenderer.getInstance().displayPetOwner();
+            StaffDerpsModRenderer.getInstance().displayInvisible(matrixStack);
+            StaffDerpsModRenderer.getInstance().displayPetOwner(matrixStack);
         }
     }
 
     /**
      * Display invisible players
      */
-    public void displayInvisible()
+    public void displayInvisible(MatrixStack matrixStack)
     {
-        if(Configs.Generic.SEE_INVISIBLE.getBooleanValue())
+        if (Configs.Generic.SEE_INVISIBLE.getBooleanValue())
         {
-        RenderUtils.renderText(0, 0, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.hidden", DataManager.getInvis().getInvsString()));
+            RenderUtils.renderText(0, 0, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.hidden", DataManager.getInvis().getInvsString()), matrixStack);
         }
     }
 
     /**
      * Display pet owner
      */
-    public void displayPetOwner()
+    public void displayPetOwner(MatrixStack matrixStack)
     {
-        if(Configs.Generic.SEE_PET_OWNER.getBooleanValue())
+        if (Configs.Generic.SEE_PET_OWNER.getBooleanValue())
         {
             String dogs = DataManager.getOwner().getDogOwners();
             String cats = DataManager.getOwner().getCatOwners();
             String parrots = DataManager.getOwner().getParrotOwners();
-            RenderUtils.renderText(0, 0, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.dog", dogs));
-            RenderUtils.renderText(0, 10, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.cat", cats));
-            RenderUtils.renderText(0, 20, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.parrot", parrots));
+            RenderUtils.renderText(0, 0, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.dog", dogs), matrixStack);
+            RenderUtils.renderText(0, 10, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.cat", cats), matrixStack);
+            RenderUtils.renderText(0, 20, 0xFFAA00, StringUtils.translate("staffderpsmod.message.display.parrot", parrots), matrixStack);
         }
     }
 }

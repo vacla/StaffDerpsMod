@@ -4,6 +4,7 @@ import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.render.StaffDerpsModRenderer;
 import fi.dy.masa.malilib.interfaces.IRenderer;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 
 public class RenderHandler implements IRenderer
 {
@@ -15,13 +16,13 @@ public class RenderHandler implements IRenderer
     }
 
     @Override
-    public void onRenderGameOverlayPost(float partialTicks)
+    public void onRenderGameOverlayPost(float partialTicks, MatrixStack matrixStack)
     {
         MinecraftClient mc = MinecraftClient.getInstance();
 
         if (Configs.Generic.ENABLED.getBooleanValue() && mc.options.debugEnabled == false && mc.player != null)
         {
-            StaffDerpsModRenderer.renderOverlays();
+            StaffDerpsModRenderer.renderOverlays(matrixStack);
         }
     }
 }

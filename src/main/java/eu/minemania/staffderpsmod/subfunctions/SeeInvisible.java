@@ -12,7 +12,9 @@ public class SeeInvisible
 {
     private Box bb;
 
-    public SeeInvisible(){}
+    public SeeInvisible()
+    {
+    }
 
     private List<PlayerEntity> getPlayers()
     {
@@ -25,7 +27,7 @@ public class SeeInvisible
     {
         List<PlayerEntity> playerList = new ArrayList<PlayerEntity>();
 
-        for (Object player: this.getPlayers())
+        for (Object player : this.getPlayers())
         {
             if (((PlayerEntity) player).isInvisible())
             {
@@ -54,10 +56,10 @@ public class SeeInvisible
             for (int i = 0; i < invsPlayers.size(); i++)
             {
                 int dist = this.distanceToMob((Entity) invsPlayers.get(i), player);
-                if ( dist < currentDist)
+                if (dist < currentDist)
                 {
                     currentDist = dist;
-                    currentPlayer = (Entity)invsPlayers.get(i);
+                    currentPlayer = (Entity) invsPlayers.get(i);
                 }
             }
             result += currentPlayer.getName().asString() + "(" + currentDist + "m) ";

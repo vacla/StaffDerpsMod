@@ -12,7 +12,7 @@ import net.minecraft.client.MinecraftClient;
 public class KeyCallbacks
 {
     public static void init(MinecraftClient mc)
-    {	
+    {
         IHotkeyCallback callbackHotkeys = new KeyCallbackHotkeys(mc);
 
         Hotkeys.SUMMON.getKeybind().setCallback(callbackHotkeys);
@@ -33,20 +33,23 @@ public class KeyCallbacks
         @Override
         public boolean onKeyAction(KeyAction action, IKeybind key)
         {
-            if(this.mc.player == null || this.mc.world == null || !MinecraftClient.isHudEnabled())
+            if (this.mc.player == null || this.mc.world == null || !MinecraftClient.isHudEnabled())
             {
                 return false;
             }
-            if(key == Hotkeys.SUMMON.getKeybind())
+            if (key == Hotkeys.SUMMON.getKeybind())
             {
                 DataManager.getSommoner().summon();
             }
-            if(key == Hotkeys.COMPASS_LEFT.getKeybind()) {
+            if (key == Hotkeys.COMPASS_LEFT.getKeybind())
+            {
                 DataManager.getCompassMath().jumpTo();
-            } else if(key == Hotkeys.COMPASS_RIGHT.getKeybind()) {
+            }
+            else if (key == Hotkeys.COMPASS_RIGHT.getKeybind())
+            {
                 DataManager.getCompassMath().passThrough();
             }
-            if(key == Hotkeys.OPEN_GUI_SETTINGS.getKeybind())
+            if (key == Hotkeys.OPEN_GUI_SETTINGS.getKeybind())
             {
                 GuiBase.openGui(new GuiConfigs());
                 return true;
