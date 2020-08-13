@@ -18,7 +18,7 @@
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "eu.minemania.staffderpsmod.StaffDerpsMod"
     ],
     "modmenu": [
@@ -29,7 +29,7 @@
     "mixins.staffderpsmod.json"
   ],
   "depends": {
-    "malilib": ">=0.10.0-dev.21"
+    "malilib": "*"
   },
   "custom": {
     "modmenu:clientsideOnly": true

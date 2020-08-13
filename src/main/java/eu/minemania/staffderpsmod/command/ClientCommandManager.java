@@ -89,7 +89,7 @@ public class ClientCommandManager
         catch (Exception e)
         {
             Text error = new LiteralText(e.getMessage() == null ? e.getClass().getName() : e.getMessage());
-            ClientCommandManager.sendError(new TranslatableText("command.failed").styled(style -> style.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, error))));
+            ClientCommandManager.sendError(new TranslatableText("command.failed").styled(style -> style.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, error))));
             e.printStackTrace();
         }
         return 1;
