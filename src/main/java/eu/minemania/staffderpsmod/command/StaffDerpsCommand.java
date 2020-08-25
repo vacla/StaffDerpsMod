@@ -108,7 +108,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
     private static int petCopy(CommandContext<ServerCommandSource> context)
     {
         String owner = DataManager.getOwner().getRandomOwner();
-        if (owner == null || owner == "")
+        if (owner == null || owner.equals(""))
         {
             localErrorT(context.getSource(), "staffderpsmod.message.command.petCopy.error");
         }

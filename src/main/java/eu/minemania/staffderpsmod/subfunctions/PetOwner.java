@@ -23,13 +23,12 @@ public class PetOwner
     {
         PlayerEntity player = MinecraftClient.getInstance().player;
         this.bb = new Box(player.getX() - 4, player.getY() - 4, player.getZ() - 4, player.getX() + 4, player.getY() + 4, player.getZ() + 4);
-        List<WolfEntity> stuff = MinecraftClient.getInstance().world.getNonSpectatingEntities(WolfEntity.class, this.bb);
-        return stuff;
+        return MinecraftClient.getInstance().world.getNonSpectatingEntities(WolfEntity.class, this.bb);
     }
 
     public String getDogOwners()
     {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         List<WolfEntity> dogs = this.getDog();
         if (dogs == null)
         {
@@ -43,13 +42,13 @@ public class PetOwner
                 continue;
             }
             String name = owner.getName().asString();
-            if (name != null && name != "")
+            if (name != null && !name.equals(""))
             {
                 this.randomOwner = name;
             }
-            result += ((WolfEntity) dog).getName().asString() + " ";
+            result.append(((WolfEntity) dog).getName().asString()).append(" ");
         }
-        return result;
+        return result.toString();
     }
 
     private List<ParrotEntity> getParrot()
@@ -61,7 +60,7 @@ public class PetOwner
 
     public String getParrotOwners()
     {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         List<ParrotEntity> parrots = this.getParrot();
         if (parrots == null)
         {
@@ -75,13 +74,13 @@ public class PetOwner
                 continue;
             }
             String name = owner.getName().asString();
-            if (name != null && name != "")
+            if (name != null && !name.equals(""))
             {
                 this.randomOwner = name;
             }
-            result += ((ParrotEntity) parrot).getName().asString() + " ";
+            result.append(((ParrotEntity) parrot).getName().asString()).append(" ");
         }
-        return result;
+        return result.toString();
     }
 
     private List<CatEntity> getCat()
@@ -93,7 +92,7 @@ public class PetOwner
 
     public String getCatOwners()
     {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         List<CatEntity> cats = this.getCat();
         if (cats == null)
         {
@@ -107,13 +106,13 @@ public class PetOwner
                 continue;
             }
             String name = owner.getName().asString();
-            if (name != null && name != "")
+            if (name != null && !name.equals(""))
             {
                 this.randomOwner = name;
             }
-            result += ((CatEntity) cat).getName().asString() + " ";
+            result.append(((CatEntity) cat).getName().asString()).append(" ");
         }
-        return result;
+        return result.toString();
     }
 
     /**
