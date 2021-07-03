@@ -16,7 +16,7 @@ public class RenderHandler implements IRenderer
     }
 
     @Override
-    public void onRenderGameOverlayPost(float partialTicks, MatrixStack matrixStack)
+    public void onRenderGameOverlayPost(MatrixStack matrixStack)
     {
         MinecraftClient mc = MinecraftClient.getInstance();
 

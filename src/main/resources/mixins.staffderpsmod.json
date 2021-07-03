@@ -2,6 +2,7 @@
   "required": true,
   "package": "eu.minemania.staffderpsmod.mixin",
   "minVersion": "0.7",
+  "compatibilityLevel": "JAVA_8",
   "client": [
     "MixinClientPlayerEntity",
     "MixinClientPlayNetworkHandler",
