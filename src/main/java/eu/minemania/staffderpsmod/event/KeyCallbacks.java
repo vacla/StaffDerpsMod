@@ -1,5 +1,6 @@
 package eu.minemania.staffderpsmod.event;
 
+import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.config.Hotkeys;
 import eu.minemania.staffderpsmod.data.DataManager;
 import eu.minemania.staffderpsmod.gui.GuiConfigs;
@@ -37,6 +38,15 @@ public class KeyCallbacks
             {
                 return false;
             }
+            if (key == Hotkeys.OPEN_GUI_SETTINGS.getKeybind())
+            {
+                GuiBase.openGui(new GuiConfigs());
+                return true;
+            }
+            if (!Configs.Generic.ENABLED.getBooleanValue())
+            {
+                return true;
+            }
             if (key == Hotkeys.SUMMON.getKeybind())
             {
                 DataManager.getSommoner().summon();
@@ -48,11 +58,6 @@ public class KeyCallbacks
             else if (key == Hotkeys.COMPASS_RIGHT.getKeybind())
             {
                 DataManager.getCompassMath().passThrough();
-            }
-            if (key == Hotkeys.OPEN_GUI_SETTINGS.getKeybind())
-            {
-                GuiBase.openGui(new GuiConfigs());
-                return true;
             }
             return false;
         }
