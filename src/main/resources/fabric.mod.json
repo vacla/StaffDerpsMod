@@ -29,6 +29,7 @@
     "mixins.staffderpsmod.json"
   ],
   "depends": {
-    "malilib": ">=0.10.0-dev.22"
+    "minecraft": "1.18.x",
+    "malilib": ">=0.10.0-dev.27"
   }
 }

@@ -1,5 +1,6 @@
 package eu.minemania.staffderpsmod.mixin;
 
+import net.minecraft.client.util.telemetry.TelemetrySender;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +24,7 @@ public abstract class MixinClientPlayNetworkHandler
 
     @SuppressWarnings("unchecked")
     @Inject(method = "<init>", at = @At("RETURN"))
-    public void onInitSDM(MinecraftClient mc, Screen screen, ClientConnection connection, GameProfile profile, CallbackInfo ci)
+    public void onInitSDM(MinecraftClient client, Screen screen, ClientConnection connection, GameProfile profile, TelemetrySender telemetrySender, CallbackInfo ci)
     {
         Command.registerCommands((CommandDispatcher<ServerCommandSource>) (Object) commandDispatcher);
     }

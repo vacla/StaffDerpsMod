@@ -1,11 +1,13 @@
 package eu.minemania.staffderpsmod.subfunctions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.ParrotEntity;
+import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
@@ -26,29 +28,19 @@ public class PetOwner
         return MinecraftClient.getInstance().world.getNonSpectatingEntities(WolfEntity.class, this.bb);
     }
 
-    public String getDogOwners()
+    public List<String> getDogOwners()
     {
-        StringBuilder result = new StringBuilder();
+        List<String> owners = new ArrayList<>();
         List<WolfEntity> dogs = this.getDog();
         if (dogs == null)
         {
-            return "";
+            return owners;
         }
-        for (Object dog : dogs)
+        for (WolfEntity dog : dogs)
         {
-            Entity owner = ((WolfEntity) dog).getOwner();
-            if (owner == null)
-            {
-                continue;
-            }
-            String name = owner.getName().asString();
-            if (name != null && !name.equals(""))
-            {
-                this.randomOwner = name;
-            }
-            result.append(((WolfEntity) dog).getName().asString()).append(" ");
+            setOwner(owners, dog);
         }
-        return result.toString();
+        return owners;
     }
 
     private List<ParrotEntity> getParrot()
@@ -58,29 +50,19 @@ public class PetOwner
         return MinecraftClient.getInstance().world.getNonSpectatingEntities(ParrotEntity.class, this.bb);
     }
 
-    public String getParrotOwners()
+    public List<String> getParrotOwners()
     {
-        StringBuilder result = new StringBuilder();
+        List<String> owners = new ArrayList<>();
         List<ParrotEntity> parrots = this.getParrot();
         if (parrots == null)
         {
-            return "";
+            return owners;
         }
-        for (Object parrot : parrots)
+        for (ParrotEntity parrot : parrots)
         {
-            Entity owner = ((ParrotEntity) parrot).getOwner();
-            if (owner == null)
-            {
-                continue;
-            }
-            String name = owner.getName().asString();
-            if (name != null && !name.equals(""))
-            {
-                this.randomOwner = name;
-            }
-            result.append(((ParrotEntity) parrot).getName().asString()).append(" ");
+            setOwner(owners, parrot);
         }
-        return result.toString();
+        return owners;
     }
 
     private List<CatEntity> getCat()
@@ -90,29 +72,19 @@ public class PetOwner
         return MinecraftClient.getInstance().world.getNonSpectatingEntities(CatEntity.class, this.bb);
     }
 
-    public String getCatOwners()
+    public List<String> getCatOwners()
     {
-        StringBuilder result = new StringBuilder();
+        List<String> owners = new ArrayList<>();
         List<CatEntity> cats = this.getCat();
         if (cats == null)
         {
-            return "";
+            return owners;
         }
-        for (Object cat : cats)
+        for (CatEntity cat : cats)
         {
-            Entity owner = ((CatEntity) cat).getOwner();
-            if (owner == null)
-            {
-                continue;
-            }
-            String name = owner.getName().asString();
-            if (name != null && !name.equals(""))
-            {
-                this.randomOwner = name;
-            }
-            result.append(((CatEntity) cat).getName().asString()).append(" ");
+            setOwner(owners, cat);
         }
-        return result.toString();
+        return owners;
     }
 
     /**
@@ -125,5 +97,28 @@ public class PetOwner
         this.getDogOwners();
         this.getParrotOwners();
         return this.randomOwner;
+    }
+
+    private void setOwner(List<String> owners, TameableEntity entity)
+    {
+        Entity owner = entity.getOwner();
+        String name;
+        if (owner == null)
+        {
+            if (entity.getOwnerUuid() == null)
+            {
+                return;
+            }
+            name = entity.getOwnerUuid().toString();
+        }
+        else
+        {
+            name = owner.getName().asString();
+        }
+        if (name != null && !name.equals(""))
+        {
+            this.randomOwner = name;
+            owners.add(name);
+        }
     }
 }

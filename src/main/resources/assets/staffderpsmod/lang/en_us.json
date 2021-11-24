@@ -28,10 +28,10 @@
   "staffderpsmod.message.compassMath.much_wall": "Too much wall. You shall not pass!",
   "staffderpsmod.message.compassMath.nothing_pass": "Nothing to pass through!",
   "staffderpsmod.message.compassMath.no_block": "No block in sight (or too far)!",
-  "staffderpsmod.message.display.cat": "Cats: %s",
-  "staffderpsmod.message.display.dog": "Dogs: %s",
+  "staffderpsmod.message.display.cat": "Cats:",
+  "staffderpsmod.message.display.dog": "Dogs:",
   "staffderpsmod.message.display.hidden": "Hidden players: %s",
-  "staffderpsmod.message.display.parrot": "Parrots: %s",
+  "staffderpsmod.message.display.parrot": "Parrots:",
   "staffderpsmod.message.setting.on": "on",
   "staffderpsmod.message.setting.off": "off"
 }

@@ -28,10 +28,10 @@
   "staffderpsmod.message.compassMath.much_wall": "Слишком много стены. Вы не пройдете!",
   "staffderpsmod.message.compassMath.nothing_pass": "Ничего не пройти!",
   "staffderpsmod.message.compassMath.no_block": "Нет блока блока в поле зрения (или слишком далеко)!",
-  "staffderpsmod.message.display.cat": "Кошки: %s",
-  "staffderpsmod.message.display.dog": "Собаки: %s",
+  "staffderpsmod.message.display.cat": "Кошки:",
+  "staffderpsmod.message.display.dog": "Собаки:",
   "staffderpsmod.message.display.hidden": "Скрытые игроки: %s",
-  "staffderpsmod.message.display.parrot": "Попугаи: %s",
+  "staffderpsmod.message.display.parrot": "Попугаи:",
   "staffderpsmod.message.setting.on": "включено",
   "staffderpsmod.message.setting.off": "выключено"
 }
