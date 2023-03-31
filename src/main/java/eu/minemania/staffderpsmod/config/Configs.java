@@ -32,8 +32,8 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean SEE_INVISIBLE = new ConfigBoolean("seeInvisible", false, "staffderpsmod.description.config.see_invisible");
         public static final ConfigBoolean SEE_PET_OWNER = new ConfigBoolean("seePetOwner", false, "staffderpsmod.description.config.see_pet_owner");
         public static final ConfigDouble SCALAR = new ConfigDouble("scalar", 2, 1, 9, "staffderpsmod.description.config.scalar");
-        public static final ConfigString SUMMON_COMMAND = new ConfigString("summonCommand", "/summon minecraft:pig ~ ~1 ~ {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}", "staffderpsmod.description.config.summon_command");
-        public static final ConfigString TP_COMMAND = new ConfigString("tpCommand", "/tp", "staffderpsmod.description.config.tp_command");
+        public static final ConfigString SUMMON_COMMAND = new ConfigString("summonCommand", "summon minecraft:pig ~ ~1 ~ {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}", "staffderpsmod.description.config.summon_command");
+        public static final ConfigString TP_COMMAND = new ConfigString("tpCommand", "tp", "staffderpsmod.description.config.tp_command");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 ENABLED,

@@ -113,7 +113,7 @@ public class PetOwner
         }
         else
         {
-            name = owner.getName().asString();
+            name = owner.getName().getString();
         }
         if (name != null && !name.equals(""))
         {

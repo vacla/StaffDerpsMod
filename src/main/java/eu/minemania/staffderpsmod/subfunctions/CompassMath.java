@@ -3,7 +3,8 @@ package eu.minemania.staffderpsmod.subfunctions;
 import eu.minemania.staffderpsmod.config.Configs;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -25,7 +26,7 @@ public class CompassMath
         double prevZ = minecraft.player.getZ();
 
         boolean doesWallExist = false;
-        TranslatableText message;
+        MutableText message;
 
         for (int i = 0; i < 512; i++)
         {
@@ -46,12 +47,12 @@ public class CompassMath
             {
                 if (!canCollide(x, y + 1, z) && !canCollide(x, y, z))
                 {
-                    minecraft.player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + y + " " + z);
+                    minecraft.player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + y + " " + z);
                     return;
                 }
                 else if (!canCollide(x, y, z) && !canCollide(x, y - 1, z))
                 {
-                    minecraft.player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (y - 1) + " " + z);
+                    minecraft.player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (y - 1) + " " + z);
                     return;
                 }
             }
@@ -59,11 +60,11 @@ public class CompassMath
 
         if (doesWallExist)
         {
-            message = new TranslatableText("staffderpsmod.message.compassMath.much_wall");
+            message = Text.translatable("staffderpsmod.message.compassMath.much_wall");
         }
         else
         {
-            message = new TranslatableText("staffderpsmod.message.compassMath.nothing_pass");
+            message = Text.translatable("staffderpsmod.message.compassMath.nothing_pass");
         }
 
         message.getStyle().withColor(Formatting.DARK_RED);
@@ -76,7 +77,7 @@ public class CompassMath
         double prevX = minecraft.player.getX();
         double prevY = minecraft.player.getY() + 1.62;
         double prevZ = minecraft.player.getZ();
-        TranslatableText message;
+        MutableText message;
 
         for (int i = 0; i < 512; i++)
         {
@@ -94,14 +95,14 @@ public class CompassMath
                 {
                     if (!canCollide(x, j + 1, z) && !canCollide(x, j + 2, z))
                     {
-                        minecraft.player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (j + 1) + " " + z);
+                        minecraft.player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (j + 1) + " " + z);
                         return;
                     }
                 }
             }
         }
 
-        message = new TranslatableText("staffderpsmod.message.compassMath.no_block");
+        message = Text.translatable("staffderpsmod.message.compassMath.no_block");
         message.getStyle().withColor(Formatting.DARK_RED);
         minecraft.player.sendMessage(message, false);
     }
@@ -110,10 +111,6 @@ public class CompassMath
     {
         BlockPos pos = new BlockPos.Mutable(x, y, z);
         BlockState state = minecraft.world.getBlockState(pos);
-        if (!state.getCollisionShape(minecraft.world, pos).isEmpty())
-        {
-            return true;
-        }
-        return false;
+        return !state.getCollisionShape(minecraft.world, pos).isEmpty();
     }
 }

@@ -11,7 +11,7 @@ import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
@@ -136,7 +136,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                     {
                         second = Integer.parseInt(splitmessage[i]) * 16 + 8;
                         first = first * 16 + 8;
-                        MinecraftClient.getInstance().player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + first + " 100 " + second);
+                        MinecraftClient.getInstance().player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + first + " 100 " + second);
                     }
                     else
                     {
@@ -159,7 +159,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         {
             blockPos = getBlockPos(context, "pos");
             localOutputT(context.getSource(), "staffderpsmod.message.command.tp", Configs.Generic.TP_COMMAND.getStringValue(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            MinecraftClient.getInstance().player.sendChatMessage(Configs.Generic.TP_COMMAND.getStringValue() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
+            MinecraftClient.getInstance().player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
         }
         catch (Exception e)
         {
@@ -219,12 +219,12 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                 Map<CommandNode<ServerCommandSource>, String> usage = dispatcher.getSmartUsage(command, context.getSource());
                 for (String u : usage.values())
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName + " " + u));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName + " " + u));
                 }
                 cmdCount += usage.size();
                 if (usage.size() == 0)
                 {
-                    ClientCommandManager.sendFeedback(new LiteralText("/" + cmdName));
+                    ClientCommandManager.sendFeedback(Text.literal("/" + cmdName));
                     cmdCount++;
                 }
             }

@@ -62,7 +62,7 @@ public class SeeInvisible
                     currentPlayer = (Entity) invsPlayers.get(i);
                 }
             }
-            result += currentPlayer.getName().asString() + "(" + currentDist + "m) ";
+            result += currentPlayer.getName().getString() + "(" + currentDist + "m) ";
             invsPlayers.remove(currentPlayer);
         }
         return result;
