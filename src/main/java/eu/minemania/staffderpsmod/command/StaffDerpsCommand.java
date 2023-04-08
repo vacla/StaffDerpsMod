@@ -9,10 +9,16 @@ import eu.minemania.staffderpsmod.config.Configs;
 import eu.minemania.staffderpsmod.data.DataManager;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.command.argument.RegistryEntryArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
+import net.minecraft.entity.EntityType;
+import net.minecraft.registry.BuiltinRegistries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Map;
@@ -27,13 +33,12 @@ import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 import static net.minecraft.command.argument.BlockPosArgumentType.blockPos;
 import static net.minecraft.command.argument.BlockPosArgumentType.getBlockPos;
-import static net.minecraft.command.argument.EntitySummonArgumentType.entitySummon;
-import static net.minecraft.command.argument.EntitySummonArgumentType.getEntitySummon;
 
 public class StaffDerpsCommand extends StaffDerpsCommandBase
 {
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher)
     {
+        CommandRegistryAccess registryAccess = CommandManager.createRegistryAccess(BuiltinRegistries.createWrapperLookup());
         ClientCommandManager.addClientSideCommand("staffderps");
         LiteralArgumentBuilder<ServerCommandSource> staffderps = literal("staffderps").executes(StaffDerpsCommand::info)
                 .then(literal("help").executes(StaffDerpsCommand::help))
@@ -52,7 +57,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                         .then(argument("pos", blockPos()).executes(StaffDerpsCommand::tp)))
                 .then(literal("summon").executes(StaffDerpsCommand::summon)
                         .then(argument("pos", blockPos())
-                                .then(argument("entity", entitySummon()).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(StaffDerpsCommand::summon))))
+                                .then(argument("entity", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENTITY_TYPE)).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(StaffDerpsCommand::summon))))
                 .then(literal("scalar").executes(StaffDerpsCommand::scalar)
                         .then(argument("scalar", doubleArg(0, 9)).executes(StaffDerpsCommand::scalar)));
         dispatcher.register(staffderps);
@@ -122,7 +127,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
     private static int chunk(CommandContext<ServerCommandSource> context)
     {
         int first = 10000000;
-        int second = 10000000;
+        int second;
         String chunkmessage;
         try
         {
@@ -136,7 +141,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                     {
                         second = Integer.parseInt(splitmessage[i]) * 16 + 8;
                         first = first * 16 + 8;
-                        MinecraftClient.getInstance().player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + first + " 100 " + second);
+                        MinecraftClient.getInstance().player.networkHandler.sendChatCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + first + " 100 " + second);
                     }
                     else
                     {
@@ -159,7 +164,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         {
             blockPos = getBlockPos(context, "pos");
             localOutputT(context.getSource(), "staffderpsmod.message.command.tp", Configs.Generic.TP_COMMAND.getStringValue(), blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            MinecraftClient.getInstance().player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
+            MinecraftClient.getInstance().player.networkHandler.sendChatCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ());
         }
         catch (Exception e)
         {
@@ -171,14 +176,14 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
     private static int summon(CommandContext<ServerCommandSource> context)
     {
         BlockPos blockPos;
-        Identifier entity;
+        RegistryEntry.Reference<EntityType<?>> entity;
         try
         {
             blockPos = getBlockPos(context, "pos");
-            entity = getEntitySummon(context, "entity");
+            entity = RegistryEntryArgumentType.getSummonableEntityType(context, "entity");
             if (entity != null)
             {
-                String command = "/summon " + entity.toString() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ() + " {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}";
+                String command = "summon " + entity.registryKey().getValue().toString() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ() + " {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}";
                 Configs.Generic.SUMMON_COMMAND.setValueFromString(command);
                 localOutputT(context.getSource(), "staffderpsmod.message.command.summon", command);
             }

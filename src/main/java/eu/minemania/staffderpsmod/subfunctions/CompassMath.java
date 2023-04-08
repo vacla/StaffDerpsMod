@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class CompassMath
 {
-    private MinecraftClient minecraft;
+    private final MinecraftClient minecraft;
 
     public CompassMath(MinecraftClient minecraft)
     {
@@ -47,12 +47,12 @@ public class CompassMath
             {
                 if (!canCollide(x, y + 1, z) && !canCollide(x, y, z))
                 {
-                    minecraft.player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + y + " " + z);
+                    minecraft.player.networkHandler.sendChatCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + y + " " + z);
                     return;
                 }
                 else if (!canCollide(x, y, z) && !canCollide(x, y - 1, z))
                 {
-                    minecraft.player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (y - 1) + " " + z);
+                    minecraft.player.networkHandler.sendChatCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (y - 1) + " " + z);
                     return;
                 }
             }
@@ -95,7 +95,7 @@ public class CompassMath
                 {
                     if (!canCollide(x, j + 1, z) && !canCollide(x, j + 2, z))
                     {
-                        minecraft.player.sendCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (j + 1) + " " + z);
+                        minecraft.player.networkHandler.sendChatCommand(Configs.Generic.TP_COMMAND.getStringValue() + " " + x + " " + (j + 1) + " " + z);
                         return;
                     }
                 }

@@ -30,6 +30,6 @@ public class MobSummoner
             result = "," + result;
         }
         result = command.substring(0, command.length() - 1) + result + "}";
-        MinecraftClient.getInstance().player.sendCommand(result);
+        MinecraftClient.getInstance().player.networkHandler.sendChatCommand(result);
     }
 }
