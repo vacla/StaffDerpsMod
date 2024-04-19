@@ -11,7 +11,7 @@ public class FakeCommandSource extends ServerCommandSource
 {
     public FakeCommandSource(PlayerEntity player)
     {
-        super(player, player.getPos(), player.getRotationClient(), null, 0, player.getEntityName(), player.getName(), null, player);
+        super(player, player.getPos(), player.getRotationClient(), null, 0, player.getName().toString(), player.getDisplayName(), null, player);
     }
 
     @Override

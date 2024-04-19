@@ -7,7 +7,6 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.command.CommandException;
 import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
@@ -60,10 +59,6 @@ public class ClientCommandManager
         try
         {
             return player.networkHandler.getCommandDispatcher().execute(reader, new FakeCommandSource(player));
-        }
-        catch (CommandException e)
-        {
-            ClientCommandManager.sendError(e.getTextMessage());
         }
         catch (CommandSyntaxException e)
         {
