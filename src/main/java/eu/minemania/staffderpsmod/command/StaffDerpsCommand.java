@@ -10,7 +10,7 @@ import eu.minemania.staffderpsmod.data.DataManager;
 import fi.dy.masa.malilib.util.StringUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.command.argument.RegistryEntryArgumentType;
+import net.minecraft.command.argument.RegistryEntryReferenceArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.entity.EntityType;
 import net.minecraft.registry.BuiltinRegistries;
@@ -57,7 +57,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
                         .then(argument("pos", blockPos()).executes(StaffDerpsCommand::tp)))
                 .then(literal("summon").executes(StaffDerpsCommand::summon)
                         .then(argument("pos", blockPos())
-                                .then(argument("entity", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENTITY_TYPE)).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(StaffDerpsCommand::summon))))
+                                .then(argument("entity", RegistryEntryReferenceArgumentType.registryEntry(registryAccess, RegistryKeys.ENTITY_TYPE)).suggests(SuggestionProviders.SUMMONABLE_ENTITIES).executes(StaffDerpsCommand::summon))))
                 .then(literal("scalar").executes(StaffDerpsCommand::scalar)
                         .then(argument("scalar", doubleArg(0, 9)).executes(StaffDerpsCommand::scalar)));
         dispatcher.register(staffderps);
@@ -180,7 +180,7 @@ public class StaffDerpsCommand extends StaffDerpsCommandBase
         try
         {
             blockPos = getBlockPos(context, "pos");
-            entity = RegistryEntryArgumentType.getSummonableEntityType(context, "entity");
+            entity = RegistryEntryReferenceArgumentType.getSummonableEntityType(context, "entity");
             if (entity != null)
             {
                 String command = "summon " + entity.registryKey().getValue().toString() + " " + blockPos.getX() + " " + blockPos.getY() + " " + blockPos.getZ() + " {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}";

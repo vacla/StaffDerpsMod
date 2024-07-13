@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.6+1.20.6] - 2024-07-13
+
+### Added
+
+- Support Minecraft 1.20.6
+
 ## [1.4.5+1.20.4] - 2024-04-19
 
 ### Added
