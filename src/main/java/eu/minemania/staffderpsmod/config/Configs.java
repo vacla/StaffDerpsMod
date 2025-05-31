@@ -2,7 +2,8 @@ package eu.minemania.staffderpsmod.config;
 
 import fi.dy.masa.malilib.config.IConfigHandler;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
@@ -28,12 +29,12 @@ public class Configs implements IConfigHandler
      */
     public static class Generic
     {
-        public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "staffderpsmod.description.config.enabled");
-        public static final ConfigBoolean SEE_INVISIBLE = new ConfigBoolean("seeInvisible", false, "staffderpsmod.description.config.see_invisible");
-        public static final ConfigBoolean SEE_PET_OWNER = new ConfigBoolean("seePetOwner", false, "staffderpsmod.description.config.see_pet_owner");
-        public static final ConfigDouble SCALAR = new ConfigDouble("scalar", 2, 1, 9, "staffderpsmod.description.config.scalar");
-        public static final ConfigString SUMMON_COMMAND = new ConfigString("summonCommand", "summon minecraft:pig ~ ~1 ~ {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}", "staffderpsmod.description.config.summon_command");
-        public static final ConfigString TP_COMMAND = new ConfigString("tpCommand", "tp", "staffderpsmod.description.config.tp_command");
+        public static final ConfigBoolean ENABLED = new ConfigBoolean("enabled", true, "staffderpsmod.config.enabled.description");
+        public static final ConfigBoolean SEE_INVISIBLE = new ConfigBoolean("seeInvisible", false, "staffderpsmod.config.see_invisible.description");
+        public static final ConfigBoolean SEE_PET_OWNER = new ConfigBoolean("seePetOwner", false, "staffderpsmod.config.see_pet_owner.description");
+        public static final ConfigDouble SCALAR = new ConfigDouble("scalar", 2, 1, 9, "staffderpsmod.config.scalar.description");
+        public static final ConfigString SUMMON_COMMAND = new ConfigString("summonCommand", "summon minecraft:pig ~ ~1 ~ {Attributes:[{Name:generic.maxHealth,Base:1}],Age:-99}", "staffderpsmod.config.summon_command.description");
+        public static final ConfigString TP_COMMAND = new ConfigString("tpCommand", "tp", "staffderpsmod.config.tp_command.description");
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 ENABLED,
@@ -50,11 +51,11 @@ public class Configs implements IConfigHandler
      */
     public static void loadFromFile()
     {
-        File configFile = new File(FileUtils.getConfigDirectory(), CONFIG_FILE_NAME);
+        Path configFile = FileUtils.getConfigDirectoryAsPath().resolve(CONFIG_FILE_NAME);
 
-        if (configFile.exists() && configFile.isFile() && configFile.canRead())
+        if (Files.exists(configFile) && Files.isReadable(configFile))
         {
-            JsonElement element = JsonUtils.parseJsonFile(configFile);
+            JsonElement element = JsonUtils.parseJsonFileAsPath(configFile);
 
             if (element != null && element.isJsonObject())
             {
@@ -71,16 +72,21 @@ public class Configs implements IConfigHandler
      */
     public static void saveToFile()
     {
-        File dir = FileUtils.getConfigDirectory();
+        Path dir = FileUtils.getConfigDirectoryAsPath();
 
-        if ((dir.exists() && dir.isDirectory()) || dir.mkdirs())
+        if (!Files.exists(dir))
+        {
+            FileUtils.createDirectoriesIfMissing(dir);
+        }
+
+        if (Files.isDirectory(dir))
         {
             JsonObject root = new JsonObject();
 
             ConfigUtils.writeConfigBase(root, "Generic", Generic.OPTIONS);
             ConfigUtils.writeConfigBase(root, "Hotkeys", Hotkeys.HOTKEY_LIST);
 
-            JsonUtils.writeJsonToFile(root, new File(dir, CONFIG_FILE_NAME));
+            JsonUtils.writeJsonToFileAsPath(root, dir.resolve(CONFIG_FILE_NAME));
         }
     }
 
